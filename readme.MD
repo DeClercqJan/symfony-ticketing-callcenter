@@ -10,12 +10,12 @@
 - timestampable trait, which I'm expecting to need in order to calculate whether or not the comment made by a user in response to a request for feedback is the right one in order to continue the track
 - will start out with the 'perfect' lifecycle a ticket can follow. That excellent service we all expect and never experiences
 - will rely heavily on Symfonycasts code
-- gonna use basic article/id123/comments-like routing structure
+- gonna use basic article/id123/edit -like routing structure
 - getRoles always returns ROLE_USER
 - fixtures for dummy data
 
 ## TO DO'S
-
+- symfony form in order not to deal with CSRF
 
 # ORIGINAL ASSIGNMENT BELOW
 
