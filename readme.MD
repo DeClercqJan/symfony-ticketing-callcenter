@@ -11,7 +11,7 @@
 - will start out with the 'perfect' lifecycle a ticket can follow. That excellent service we all expect and never experiences
 - will rely heavily on Symfonycasts code
 - gonna use basic article/id123/comments-like routing structure
-
+- getRoles always returns ROLE_USER
 
 ## TO DO'S
 
