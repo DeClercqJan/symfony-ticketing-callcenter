@@ -1,5 +1,20 @@
 # TICKETING CALLCENTER 
 
+## BASIC IDEA
+
+## IMPLEMENTATION 
+- took time out to schematize: read the assigment and tried to separate the entities and their properties on the one hand and, on the other, listed the actions users can take as I'm planning to assign them to several users (and reuse them whilst doing so) 
+- scheming was far from easy and probably will need to change stuff, which will get messy. May even prove to have been the wrong approach
+- for basic set-up, I have 3 entitites. Users and tickets in ManyToMany relation (as a Customer-user can have many tickets and a ticket can have both a Customer-user and a Agent-user) and comments: easy; 1 comments, 1 user/author, 1 ticket; 1 ticket can have many comments; 1 user can have many comments
+- (I was, orginally, gonna extend User class to Customer and Agent classes and NOT have a ManyToMany-relationship, but didn't (immediately) find how Doctrine would react so for now I'm relying on the roles-property
+- timestampable trait, which I'm expecting to need in order to calculate whether or not the comment made by a user in response to a request for feedback is the right one in order to continue the track
+- will start out with the 'perfect' lifecycle a ticket can follow. That excellent service we all expect and never experiences
+- will rely heavily on Symfonycasts code
+- gonna use basic article/id123/comments-like routing structure
+
+
+## TO DO'S
+
 
 # ORIGINAL ASSIGNMENT BELOW
 
