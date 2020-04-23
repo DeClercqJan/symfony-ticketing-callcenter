@@ -23,7 +23,7 @@ class UserFixture extends BaseFixture
         // TODO: Implement loadData() method.
         $this->createMany(10, 'usersCustomers', function ($count) use ($manager) {
             $user = new User();
-            $user->setEmail($this->faker->email);
+            $user->setEmail(sprintf('spacebar%d@example.com', $count));
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 'engage'

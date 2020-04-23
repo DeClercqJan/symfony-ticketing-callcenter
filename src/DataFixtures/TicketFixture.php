@@ -7,7 +7,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class TicketFixture extends BaseFixture
+class TicketFixture extends BaseFixture implements DependentFixtureInterface
 {
     private static $externalStatusMessages = [
         'open',
@@ -28,7 +28,7 @@ Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi 
 lorem proident [beef ribs](https://baconipsum.com/)
 EOF
             );
-            // $ticket->addUser($this->getRandomReference('usersCustomers'));
+            $ticket->addUser($this->getRandomReference('usersCustomers'));
             return $ticket;
         });
         $manager->flush();
@@ -40,7 +40,7 @@ EOF
     public function getDependencies()
     {
         return [
-            CommentFixture::class,
+            // CommentFixture::class,
             UserFixture::class,
         ];
     }

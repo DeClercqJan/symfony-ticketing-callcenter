@@ -15,8 +15,10 @@ class CommentFixture extends BaseFixture implements DependentFixtureInterface
     {
         $this->createMany(100, 'comments', function ($count) use ($manager) {
             $comment = new Comment();
-            $comment->setCommentText(
-                $this->faker->boolean ? $this->faker->paragraph : $this->faker->sentences(1, true)
+            $comment->setCommentText(<<<EOF
+Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
+lorem proident [beef ribs](https://baconipsum.com/)
+EOF
             );
             $comment->setIsCommentPublic($this->faker->boolean(60));
             $comment->setTicket($this->getRandomReference('tickets'));
