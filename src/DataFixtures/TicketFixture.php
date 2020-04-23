@@ -61,9 +61,9 @@ EOF
 
     public function getDependencies()
     {
-//        return [
-//            CommentFixture::class,
-//        ];
+        return [
+            CommentFixture::class,
+        ];
     }
 }
 
