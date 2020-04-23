@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TicketController!{% endblock %}
+
+{% block body %}
+    {% if ticket %}
+        <p>ticket id is : {{ ticket.id }}</p>
+        <p>{{ ticket.ticketText }}</p>
+        <ul>
+            {% for comment in ticket.comments %}
+                <li>comment id {{ comment.id }} commentText: {{ comment.commentText }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <p><a href={{ path('ticket_home') }}>naar alle tickets</a></p>
+{% endblock %}

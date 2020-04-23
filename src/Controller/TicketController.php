@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Ticket;
 use App\Repository\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,9 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class TicketController extends AbstractController
 {
     /**
-     * @Route("/ticket", name="ticket")
+     * @Route("/ticket", name="ticket_home")
      */
-    public function index(TicketRepository $ticketRepository)
+    public function home(TicketRepository $ticketRepository)
     {
         $tickets = $ticketRepository->findAll();
 
@@ -21,4 +22,14 @@ class TicketController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/ticket/{id}", name="ticket_show")
+     */
+    public function show(Ticket $ticket)
+    {
+        return $this->render('ticket/show.html.twig', [
+            'controller_name' => 'TicketController',
+            'ticket' => $ticket,
+        ]);
+    }
 }
