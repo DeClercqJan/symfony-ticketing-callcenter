@@ -23,11 +23,7 @@ class TicketFixture extends BaseFixture implements DependentFixtureInterface
             $ticket = new Ticket();
             $ticket->setPriorityLevel($this->faker->numberBetween(0, 2));
             $ticket->setExternalStatusMessage($this->faker->randomElement(self::$externalStatusMessages));
-            $ticket->setTicketText(<<<EOF
-Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
-lorem proident [beef ribs](https://baconipsum.com/)
-EOF
-            );
+            $ticket->setTicketText($this->faker->paragraph(1, true));
             $ticket->addUser($this->getRandomReference('usersCustomers'));
             return $ticket;
         });
