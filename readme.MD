@@ -12,6 +12,7 @@
 - will rely heavily on Symfonycasts code
 - gonna use basic article/id123/comments-like routing structure
 - getRoles always returns ROLE_USER
+- fixtures for dummy data
 
 ## TO DO'S
 

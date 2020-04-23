@@ -48,7 +48,7 @@ abstract class BaseFixture extends Fixture
     {
         for ($i = 0; $i < $count; $i++) {
             $entity = $factory($i);
-
+            // dump($entity);
             if (null === $entity) {
                 throw new \LogicException('Did you forget to return the entity object from your callback to BaseFixture::createMany()?');
             }
