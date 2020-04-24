@@ -17,7 +17,9 @@
 - working mailer, using symfony/mailer bundle and mailtrap to debug. Now gonna configure symfonycasts' reset-password-bundle
 - registration form using make:registration-form 
 
+
 ## TO DO'S
+
 
 # ORIGINAL ASSIGNMENT BELOW
 
