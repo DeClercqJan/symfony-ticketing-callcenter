@@ -171,9 +171,9 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         // TODO: Implement eraseCredentials() method.
     }
 
-    public function __toString() : string
-    {
-        return $this->getEmail();
-        // TODO: Implement eraseCredentials() method.
-    }
+//    public function __toString() : string
+//    {
+//        return $this->getEmail();
+//        // TODO: Implement eraseCredentials() method.
+//    }
 }
