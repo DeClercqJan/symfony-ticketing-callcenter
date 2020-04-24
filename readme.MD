@@ -13,6 +13,8 @@
 - gonna use basic article/id123/edit -like routing structure
 - getRoles always returns ROLE_USER
 - fixtures for dummy data
+- made functional login form using maker using make:auth and tinkering a bit in security.yaml and such. But can't see username of logged in user. Moving on) 
+- will try https://github.com/SymfonyCasts/reset-password-bundle
 
 ## TO DO'S
 - symfony form in order not to deal with CSRF
