@@ -19,9 +19,22 @@
 - welcome mail to all newly registered users (need to change, because this was meant for new agents - see assignment below)
 -added data transformer to form in order to add roles to new User. However, no real data yet"
 
+belangrijke les: die inversed by wel belangrijk bv. in het geval toen ik een new Ticket wou onmaken, selecteerde ik wel een user, maar werd niet opgeslagen
+dan users property van ticket de annotatie veranderd naar inversed by (in plaat svan mapped by) en toen werkte het-
 
 ## TO DO'S
 - check routes. Need logical path for when not logged in and such and redirect to previous RELEVANT page. Think I'm also employing hard coded redirects sometimes and sometime that trait TargetPath or something
+-created dev branch to try out make:crud
+- need to hash password of newly created users
+- need to selectively display properties: serializer ...
+- creating new user doesn work bidirectionally with tickets. 
+? Tried something with @ORM\JoinTable(name="ticket_user")
+? spelling mistake? user vs users
+? inversedby vs mappedby
+-> check my notes, bv. voor php-doctrine oefening met api enzo
+-> check https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/association-mapping.html
+
+-merge branch in master branch mergen0
 
 # ORIGINAL ASSIGNMENT BELOW
 
