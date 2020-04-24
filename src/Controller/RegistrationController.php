@@ -19,6 +19,7 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class RegistrationController extends AbstractController
 {
+    use TargetPathTrait;
 
     /**
      * @Route("/register", name="app_register")
@@ -48,7 +49,6 @@ class RegistrationController extends AbstractController
                 ->from(new Address('welcome@moshimoshicallcenter.com', 'Welcome Bot'))
                 ->to($user->getEmail())
                 ->subject('Succesful registration')
-                ->html("<")
                 ->htmlTemplate('registration/registration_email.html.twig')
             ;
 
@@ -60,7 +60,7 @@ class RegistrationController extends AbstractController
                 $authenticator,
                 'main' // firewall name in security.yaml
             )
-                ?: new RedirectResponse('/login'); // fallback
+                ?: new RedirectResponse('/'); // fallback
             //;
         }
 
