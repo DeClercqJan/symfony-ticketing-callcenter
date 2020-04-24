@@ -39,12 +39,12 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $roles = [];
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", inversedBy="users", cascade={"remove"})
      */
     private $tickets;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", cascade={"remove"})
      */
     private $comments;
 
@@ -168,6 +168,12 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     public function eraseCredentials()
     {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function __toString() : string
+    {
+        return $this->getEmail();
         // TODO: Implement eraseCredentials() method.
     }
 }

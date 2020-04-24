@@ -37,12 +37,13 @@ class Ticket
     private $ticketText;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="ticket")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="ticket", cascade={"remove"})
      */
     private $comments;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tickets")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="users")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $users;
 
@@ -150,5 +151,10 @@ class Ticket
         }
 
         return $this;
+    }
+    public function __toString() : string
+    {
+        return $this->getTicketText();
+        // TODO: Implement eraseCredentials() method.
     }
 }

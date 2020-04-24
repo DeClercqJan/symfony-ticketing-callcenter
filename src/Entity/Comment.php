@@ -32,12 +32,14 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Ticket", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $ticket;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $user;
 
@@ -92,5 +94,10 @@ class Comment
         $this->user = $user;
 
         return $this;
+    }
+    public function __toString() : string
+    {
+        return $this->getCommentText();
+        // TODO: Implement eraseCredentials() method.
     }
 }

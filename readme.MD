@@ -20,7 +20,7 @@
 
 
 ## TO DO'S
-
+- check routes. Need logical path for when not logged in and such and redirect to previous RELEVANT page. Think I'm also employing hard coded redirects sometimes and sometime that trait TargetPath or something
 
 # ORIGINAL ASSIGNMENT BELOW
 
