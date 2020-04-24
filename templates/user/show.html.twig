@@ -7,30 +7,56 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ user.id }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Password</th>
+            <td>{{ user.password }}</td>
+        </tr>
+        <tr>
+            <th>Roles</th>
+            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+        </tr>
+        <tr>
+            <th>CreatedAt</th>
+            <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>UpdatedAt</th>
+            <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Tickets</th>
+            {% for ticket in user.tickets %}
+                <td>ticket id {{ ticket.id }} <br>
+                    ticketText: {{ ticket.ticketText }} <br>
+                    {% for user in ticket.users %}
+                        user: {{ user.email }}  <br>
+                        roles user : {% for role in user.roles %}
+                        {{ role }}
+                    {% endfor %}
+                    {% endfor %}
+                </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Comments</th>
+            {% for comment in user.comments %}
+                <td>comment id {{ comment.id }} <br>
+                    commentText: {{ comment.commentText }} <br>
+                    user: {{ comment.user }} }} <br>
+                    roles user: {% for role in comment.user.roles %}
+                        {{ role }}
+                    {% endfor %}
+                </td>
+            {% endfor %}
+        </tr>
         </tbody>
     </table>
 

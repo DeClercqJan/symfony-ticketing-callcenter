@@ -17,6 +17,7 @@
 - working mailer, using symfony/mailer bundle and mailtrap to debug. Now gonna configure symfonycasts' reset-password-bundle
 - registration form using make:registration-form
 - welcome mail to all newly registered users (need to change, because this was meant for new agents - see assignment below)
+-added data transformer to form in order to add roles to new User. However, no real data yet"
 
 
 ## TO DO'S
