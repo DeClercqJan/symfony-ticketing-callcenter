@@ -14,12 +14,10 @@
 - getRoles always returns ROLE_USER
 - fixtures for dummy data
 - made functional login form using maker using make:auth and tinkering a bit in security.yaml and such. But can't see username of logged in user. Moving on) 
--  "working mailer, using symfony/mailer bundle and mailtrap to debug. Now gonna configure symfonycasts' reset-password-bundle"
-- ticking@moshimoshicallcenter.com
-- resetpasswordconfirmations@moshimoshicallcenter.com (Reset Password Bot)
+- working mailer, using symfony/mailer bundle and mailtrap to debug. Now gonna configure symfonycasts' reset-password-bundle
+- registration form using make:registration-form 
 
 ## TO DO'S
-- symfony form in order not to deal with CSRF
 
 # ORIGINAL ASSIGNMENT BELOW
 
