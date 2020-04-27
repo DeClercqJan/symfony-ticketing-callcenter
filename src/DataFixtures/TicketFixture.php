@@ -25,6 +25,7 @@ class TicketFixture extends BaseFixture implements DependentFixtureInterface
             $ticket->setExternalStatusMessage($this->faker->randomElement(self::$externalStatusMessages));
             $ticket->setTicketText($this->faker->paragraph(1, true));
             $ticket->addUser($this->getRandomReference('usersCustomers'));
+            $ticket->setAuthor($this->getRandomReference('usersCustomers'));
             return $ticket;
         });
         $manager->flush();

@@ -50,6 +50,11 @@ class Ticket
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $author;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -160,5 +165,17 @@ class Ticket
     {
         return $this->getTicketText();
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(string $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 }

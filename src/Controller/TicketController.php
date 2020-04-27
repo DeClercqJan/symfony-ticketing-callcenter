@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/ticket")
@@ -28,13 +30,13 @@ class TicketController extends AbstractController
     /**
      * @Route("/new", name="ticket_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, UserInterface $user): Response
     {
         $ticket = new Ticket();
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $ticket->setAuthor($user);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
             $entityManager->flush();
@@ -53,6 +55,10 @@ class TicketController extends AbstractController
      */
     public function show(Ticket $ticket): Response
     {
+        if (!$this->isGranted('POST_VIEW', $ticket)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+
         return $this->render('ticket/show.html.twig', [
             'ticket' => $ticket,
         ]);

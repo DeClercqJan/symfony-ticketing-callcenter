@@ -32,6 +32,10 @@
             <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
+            <th>Author</th>
+            <td>{{ ticket.author }}</td>
+        </tr>
+        <tr>
             <th>Users</th>
             {% for user in ticket.users %}
                 <td>comment id {{ user.id }} <br>

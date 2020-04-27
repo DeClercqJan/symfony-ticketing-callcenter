@@ -2,7 +2,7 @@
 
 ## BASIC IDEA
 
-## IMPLEMENTATION 
+## IMPLEMENTATION (- points, * subelements, X lessons)
 - took time out to schematize: read the assigment and tried to separate the entities and their properties on the one hand and, on the other, listed the actions users can take as I'm planning to assign them to several users (and reuse them whilst doing so) 
 - scheming was far from easy and probably will need to change stuff, which will get messy. May even prove to have been the wrong approach
 - for basic set-up, I have 3 entitites. Users and tickets in ManyToMany relation (as a Customer-user can have many tickets and a ticket can have both a Customer-user and a Agent-user) and comments: easy; 1 comments, 1 user/author, 1 ticket; 1 ticket can have many comments; 1 user can have many comments
@@ -78,13 +78,15 @@ X met cascade kan je removen en nog weel meer
          * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="users", cascade={"remove"})
          */
         private $tickets;  
+- user roles correspond to a series of authorizations. See security.yaml. Custom voter per object checks access
+- note that I'm setting the author as a string, not as an object, when creating a new post. When checking access to one's own posts, strings, not objects are compared
 
-## TO DO'S (- to do's, * subelements, X lessons)
+
+## TO DO'S
 - check routes. Need logical path for when not logged in and such and redirect to previous RELEVANT page. Think I'm also employing hard coded redirects sometimes and sometime that trait TargetPath or something
-- need to hash password of newly created users
-- need to selectively display properties: serializer ...
-
--merge branch in master branch mergen0
+- need to selectively display properties: serializer ... but is'nt that for API? Will need to cha
+- clean this up and move lessons learned to notes
+- dev  branch in master branch mergen0
 
 # ORIGINAL ASSIGNMENT BELOW
 
