@@ -42,7 +42,7 @@ class Ticket
     private $comments;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $users;

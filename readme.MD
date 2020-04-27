@@ -28,6 +28,9 @@ dan users property van ticket de annotatie veranderd naar inversed by (in plaat 
 - need to hash password of newly created users
 - need to selectively display properties: serializer ...
 - creating new user doesn work bidirectionally with tickets. 
+    The mappings App\Entity\User#tickets and App\Entity\Ticket#users are inconsistent with each other.
+ 	 The association App\Entity\Ticket#users refers to the inverse side field App\Entity\User#users which does not exist.
+ php bin/console doctrine:schema:validate
 ? Tried something with @ORM\JoinTable(name="ticket_user")
 ? spelling mistake? user vs users
 ? inversedby vs mappedby

@@ -106,7 +106,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         return $this->tickets;
     }
-
+    
     public function addTicket(Ticket $ticket): self
     {
         if (!$this->tickets->contains($ticket)) {
