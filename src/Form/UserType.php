@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Ticket;
 use App\Entity\User;
 use Doctrine\DBAL\Types\ArrayType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -21,7 +23,11 @@ class UserType extends AbstractType
             ->add('roles', ChoiceType::class, ['choices' =>['DUMMY' => 'abc']])
             ->add('createdAt')
             ->add('updatedAt')
-            ->add('tickets')
+            ->add('tickets', EntityType::class, [
+                'class' => Ticket::class,
+                'multiple' => true,
+                'by_reference' => false,
+            ])
         ;
         //roles field data transformer
         $builder->get('roles')

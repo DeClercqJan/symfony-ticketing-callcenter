@@ -17,25 +17,72 @@
 - working mailer, using symfony/mailer bundle and mailtrap to debug. Now gonna configure symfonycasts' reset-password-bundle
 - registration form using make:registration-form
 - welcome mail to all newly registered users (need to change, because this was meant for new agents - see assignment below)
--added data transformer to form in order to add roles to new User. However, no real data yet"
+- added data transformer to form in order to add roles to new User. However, no real data yet"
+- created dev branch to try out make:crud in the hopes of facilitating set-up and have a good base to tinker with
+- massive problems creating new user doesn work bidirectionally with tickets
+*The mappings App\Entity\User#tickets and App\Entity\Ticket#users are inconsistent with each other.
+ The association App\Entity\Ticket#users refers to the inverse side field App\Entity\User#users which does not exist.
+ spelling mistake? user vs users
+ inversedby vs mappedby
+X OK die mapped by en inversedby annotation s lijkt me te verwijzen naar de property(!)naam in de andere entity. Geen fout in ieder geval meer)
+* ook als ik user wil verwijderen nu:
+ "You cannot refresh a user from the EntityUserProvider that does not contain an identifier. The user object has to be serialized with its own identifier mapped by Doctrine."
+X OK was omdat ik mezelf (ingelogde gebruiken) verwijderde
+X entity with inversedBy above a property is the owning side (mapped by is inverse side): ticket (makes more sense: Whenever you add a new article, you want to connect it with existing or new tags. 
+check https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/association-mapping.html
+https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/association-mapping.html#owning-and-inverse-side-on-a-manytomany-association
+https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#many-to-many-bidirectional
+X after many hours I created a different branch in order to follow step of https://symfonycasts.com/screencast/collections/saving-inverse-side-collection :
+"We didn't need to add a lot of code to get this to work... but this situation has caused many developers to lose countless hours trying to get their relationship to save. To summarize: if you're modifying the inverse side of a relationship, set the by_reference form option to false, create an adder and remover function, and make sure you set the owning side of the relationship in each. That is it."
+X opgelost: in formulier moest ik naar klasse verwijzen en reference naar false zetten in de reverse side. Zonder die multple werkt het gelijk ook neit. Kwestie van functionaliteit betekent het dat men meerdere Tickets kan toewijzen aan de nieuwe gebruiker
+            ->add('tickets', EntityType::class, [
+                'class' => Ticket::class,
+                'multiple' => true,
+                'by_reference' => false,
+            ])
+            ook moet ik in de addmethode zowel eigen property updaten als method op de owner aanroepen;
+                        $this->tickets[] = $ticket;
+                        $ticket->addUser($this);
+            deze laatste geldt voor beide, owning en inverse, maar voor de owning staat het erpreciesal
+            (if-checks in die methodes zijn nodige om geen infinite loops te creeren/infinite recursion)
+X great tools for tinkering with annotations 
+ php bin/console doctrine:schema:validate
+ php bin/console doctrine:schema:update --force
+- deleteing a users, deletes all related tickets and comments, but deleting a ticket or a comment doesnt delete user. Deleting a ticket, deletes a comment, but deleting a comment doesnt delete the ticket
+X met cascade kan je removen en nog weel meer
+  je kan dan zeggen wat de verschillende entities mogen doen bij anderen 
+  hoe je het gebruikt is ook van belang voor de richting:
+    beide richtingen moet je je annotations voor beide zo schrijven:
+        /**
+         * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets", cascade={"remove"})
+         */
+    en dus ook
+        /**
+         * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="users", cascade={"remove"})
+         */
+        private $tickets;
+    waarbij ik doel op dat ze allemaal bij dezelfde cascade remove moeten hebben
+    
+    enkel 1 richting:
+    1 zal dan 
+    bij owner wat meer tekst zijn
+      /**
+         * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets")
+         * @ORM\JoinTable(name="ticket_user",
+         *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
+         *      inverseJoinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id")}
+         * )
+         */
+    en bij inverse dan 
+        /**
+         * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="users", cascade={"remove"})
+         */
+        private $tickets;  
 
-belangrijke les: die inversed by wel belangrijk bv. in het geval toen ik een new Ticket wou onmaken, selecteerde ik wel een user, maar werd niet opgeslagen
-dan users property van ticket de annotatie veranderd naar inversed by (in plaat svan mapped by) en toen werkte het-
-
-## TO DO'S
+## TO DO'S (- to do's, * subelements, X lessons)
 - check routes. Need logical path for when not logged in and such and redirect to previous RELEVANT page. Think I'm also employing hard coded redirects sometimes and sometime that trait TargetPath or something
--created dev branch to try out make:crud
 - need to hash password of newly created users
 - need to selectively display properties: serializer ...
-- creating new user doesn work bidirectionally with tickets. 
-    The mappings App\Entity\User#tickets and App\Entity\Ticket#users are inconsistent with each other.
- 	 The association App\Entity\Ticket#users refers to the inverse side field App\Entity\User#users which does not exist.
- php bin/console doctrine:schema:validate
-? Tried something with @ORM\JoinTable(name="ticket_user")
-? spelling mistake? user vs users
-? inversedby vs mappedby
--> check my notes, bv. voor php-doctrine oefening met api enzo
--> check https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/association-mapping.html
 
 -merge branch in master branch mergen0
 

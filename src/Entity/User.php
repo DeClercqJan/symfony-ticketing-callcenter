@@ -106,11 +106,12 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         return $this->tickets;
     }
-    
+
     public function addTicket(Ticket $ticket): self
     {
         if (!$this->tickets->contains($ticket)) {
             $this->tickets[] = $ticket;
+            $ticket->addUser($this);
         }
 
         return $this;
@@ -120,6 +121,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         if ($this->tickets->contains($ticket)) {
             $this->tickets->removeElement($ticket);
+            $ticket->removeUser($this);
         }
 
         return $this;
@@ -171,7 +173,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         // TODO: Implement eraseCredentials() method.
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getEmail();
         // TODO: Implement eraseCredentials() method.
