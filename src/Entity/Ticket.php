@@ -51,7 +51,8 @@ class Ticket
     private $users;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="authoredTickets")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $author;
 
@@ -161,21 +162,41 @@ class Ticket
         return $this;
     }
 
+
     public function __toString(): string
     {
         return $this->getTicketText();
         // TODO: Implement eraseCredentials() method.
     }
 
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(string $author): self
+    public function setAuthor($author): self
     {
         $this->author = $author;
 
         return $this;
     }
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+//    public function addAuthor(User $user): self
+//    {
+//        if (!$this->author->contains($user)) {
+//            $this->author[] = $user;
+//            $user->addAuthoredTickets($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeAuthor(User $user): self
+//    {
+//        if ($this->users->contains($user)) {
+//            $this->users->removeElement($user);
+//            $user->removeAuthoredTickets($this);
+//        }
+//
+//        return $this;
+//    }
 }

@@ -48,10 +48,16 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="author", cascade={"remove"})
+     */
+    private $authoredTickets;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->authoredTickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,6 +158,37 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
             // set the owning side to null (unless already changed)
             if ($comment->getUser() === $this) {
                 $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ticket[]
+     */
+    public function getAuthoredTickets(): Collection
+    {
+        return $this->authoredTickets;
+    }
+
+    public function addAuthoredTickets(Ticket $ticket): self
+    {
+        if (!$this->authoredTickets->contains($ticket)) {
+            $this->authoredTickets[] = $ticket;
+            $ticket->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthoredTickets(Ticket $ticket): self
+    {
+        if ($this->authoredTickets->contains($ticket)) {
+            $this->authoredTickets->removeElement($ticket);
+            // set the owning side to null (unless already changed)
+            if ($ticket->getAuthor() === $this) {
+                $ticket->setAuthor(null);
             }
         }
 

@@ -136,6 +136,10 @@ X met cascade kan je removen en nog weel meer
             {{ form_widget(form._token) }}
             <button class="btn">{{ button_label|default('Save') }}</button>
             {{ form_end(form, {'render_rest': false}) }}
+- storing real users as authors of tickets (so tickets now have 2 properties in different relations with users)
+- in order for form to work, I had to build a datatransform that transforms user and their email back and forth
+(got lucky with a combination of https://symfonycasts.com/screencast/symfony-forms/data-transformer + https://symfony.com/doc/current/form/data_transformers.html)
+          
             
 ## TO DO'S
 - check routes. Need logical path for when not logged in and such and redirect to previous RELEVANT page. Think I'm also employing hard coded redirects sometimes and sometime that trait TargetPath or something

@@ -7,6 +7,7 @@
     {{ form_row(form.priorityLevel) }}
     {{ form_row(form.externalStatusMessage) }}
     {{ form_row(form.users) }}
+{#    {{ form_row(form.author) }}#}
 {% endif %}
 {{ form_widget(form._token) }}
 <button class="btn">{{ button_label|default('Save') }}</button>

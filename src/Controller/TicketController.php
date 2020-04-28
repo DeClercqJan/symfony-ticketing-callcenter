@@ -33,7 +33,6 @@ class TicketController extends AbstractController
      */
     public function new(Request $request, UserInterface $user, Security $security): Response
     {
-
         $ticket = new Ticket();
         if (!$this->isGranted('TICKET_CREATE', $ticket)) {
             throw $this->createAccessDeniedException('No access!');
