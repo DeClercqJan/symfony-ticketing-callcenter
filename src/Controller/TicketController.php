@@ -42,7 +42,6 @@ class TicketController extends AbstractController
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $ticket->setAuthor($user);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
             $entityManager->flush();

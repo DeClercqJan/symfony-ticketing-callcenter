@@ -1,4 +1,13 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{% if is_granted('ROLE_POST_CREATE') %}
+    {{ form_row(form.ticketText) }}
+{% endif %}
+{% if is_granted('ROLE_ADMIN_TICKET') %}
+    {{ form_row(form.priorityLevel) }}
+    {{ form_row(form.externalStatusMessage) }}
+    {{ form_row(form.users) }}
+{% endif %}
+{{ form_widget(form._token) }}
+{#    {{ form_widget(form) }}#}
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form, {'render_rest': false}) }}
