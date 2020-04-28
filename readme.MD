@@ -66,13 +66,13 @@ X met cascade kan je removen en nog weel meer
     enkel 1 richting:
     1 zal dan 
     bij owner wat meer tekst zijn
-      /**
-         * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets")
-         * @ORM\JoinTable(name="ticket_user",
-         *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
-         *      inverseJoinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id")}
-         * )
-         */
+             /**
+              * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets")
+              * @ORM\JoinTable(name="ticket_user",
+              *      joinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")},
+              *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+              * )
+              */
     en bij inverse dan 
         /**
          * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="users", cascade={"remove"})
@@ -104,7 +104,6 @@ and this works fine even when I remove POST_CREATE from security.yaml
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha
 - clean this up and move lessons learned to notes
 - dev  branch in master branch mergen0
-- need to check if I did not reverse the naming of columns in the join table between user and tickets
 
 # ORIGINAL ASSIGNMENT BELOW
 

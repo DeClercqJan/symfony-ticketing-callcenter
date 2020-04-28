@@ -35,9 +35,9 @@ class TicketVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'POST_VIEW':
-                if ($ticket->getAuthor() == $user->getEmail()) {
+                // if ($ticket->getAuthor() == $user->getEmail()) {
                     return true;
-                }
+                // }
                 // logic to determine if the user can VIEW
                 // return true or false
                 break;

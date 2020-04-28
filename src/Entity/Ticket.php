@@ -44,8 +44,8 @@ class Ticket
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets")
      * @ORM\JoinTable(name="ticket_user",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      * )
      */
     private $users;
