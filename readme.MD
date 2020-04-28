@@ -123,8 +123,20 @@ X met cascade kan je removen en nog weel meer
                 if ($ticket->getAuthor() == $user->getEmail()) {
                     return true;
                 }
-
-
+- some form fields only visible dependening on ROLE. Some not rendered at all. Default values and such in the ...Type Form classes
+            ->add('priorityLevel', null, [
+                'empty_data' => '0',
+            ])
+            
+            {% if is_granted('ROLE_ADMIN_TICKET') %}
+                {{ form_row(form.priorityLevel) }}
+                {{ form_row(form.externalStatusMessage) }}
+                {{ form_row(form.users) }}
+            {% endif %}
+            {{ form_widget(form._token) }}
+            <button class="btn">{{ button_label|default('Save') }}</button>
+            {{ form_end(form, {'render_rest': false}) }}
+            
 ## TO DO'S
 - check routes. Need logical path for when not logged in and such and redirect to previous RELEVANT page. Think I'm also employing hard coded redirects sometimes and sometime that trait TargetPath or something
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick

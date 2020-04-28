@@ -3,39 +3,46 @@
 {% block title %}Ticket index{% endblock %}
 
 {% block body %}
+
     <h1>Ticket index</h1>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>PriorityLevel</th>
-                <th>ExternalStatusMessage</th>
-                <th>TicketText</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>PriorityLevel</th>
+            <th>ExternalStatusMessage</th>
+            <th>TicketText</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
+{#        {% if app.user.tickets is empty and not is_granted('ROLE_ADMIN_TICKET')%}#}
+{#        <p>no records with your name on were found</p>#}
+{#        {% endif %}#}
         {% for ticket in tickets %}
-            <tr>
-                <td>{{ ticket.id }}</td>
-                <td>{{ ticket.priorityLevel }}</td>
-                <td>{{ ticket.externalStatusMessage }}</td>
-                <td>{{ ticket.ticketText }}</td>
-                <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
-                    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
-                </td>
-            </tr>
+            {% if app.user == ticket.author or is_granted('ROLE_ADMIN_TICKET') %}
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.priorityLevel }}</td>
+                    <td>{{ ticket.externalStatusMessage }}</td>
+                    <td>{{ ticket.ticketText }}</td>
+                    <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
+                        <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% endif %}
         {% else %}
             <tr>
                 <td colspan="7">no records found</td>
             </tr>
         {% endfor %}
+
         </tbody>
     </table>
 

@@ -1,4 +1,5 @@
 {{ form_start(form) }}
+{#    {{ form_widget(form) }}#}
 {% if is_granted('ROLE_POST_CREATE') %}
     {{ form_row(form.ticketText) }}
 {% endif %}
@@ -8,6 +9,5 @@
     {{ form_row(form.users) }}
 {% endif %}
 {{ form_widget(form._token) }}
-{#    {{ form_widget(form) }}#}
 <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form, {'render_rest': false}) }}
