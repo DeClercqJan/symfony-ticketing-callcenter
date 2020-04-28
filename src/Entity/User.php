@@ -165,6 +165,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     public function getUsername()
     {
+        return $this->getEmail();
         // TODO: Implement getUsername() method.
     }
 

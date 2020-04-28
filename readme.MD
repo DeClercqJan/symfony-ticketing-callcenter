@@ -11,7 +11,7 @@
 - will start out with the 'perfect' lifecycle a ticket can follow. That excellent service we all expect and never experiences
 - will rely heavily on Symfonycasts code
 - gonna use basic article/id123/edit -like routing structure
-- getRoles always returns ROLE_USER
+- getRoles always returns ROLE_CUSTOMER
 - fixtures for dummy data
 - made functional login form using maker using make:auth and tinkering a bit in security.yaml and such. But can't see username of logged in user. Moving on) 
 - working mailer, using symfony/mailer bundle and mailtrap to debug. Now gonna configure symfonycasts' reset-password-bundle
