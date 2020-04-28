@@ -35,7 +35,7 @@ class TicketController extends AbstractController
     {
 
         $ticket = new Ticket();
-        if (!$this->isGranted('POST_CREATE', $ticket)) {
+        if (!$this->isGranted('TICKET_CREATE', $ticket)) {
             throw $this->createAccessDeniedException('No access!');
         }
 
@@ -61,7 +61,7 @@ class TicketController extends AbstractController
      */
     public function show(Ticket $ticket): Response
     {
-        if (!$this->isGranted('POST_VIEW', $ticket)) {
+        if (!$this->isGranted('TICKET_VIEW', $ticket)) {
             throw $this->createAccessDeniedException('No access!');
         }
 
@@ -75,6 +75,10 @@ class TicketController extends AbstractController
      */
     public function edit(Request $request, Ticket $ticket): Response
     {
+        if (!$this->isGranted('TICKET_EDIT', $ticket)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
 

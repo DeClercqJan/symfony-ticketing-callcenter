@@ -80,28 +80,54 @@ X met cascade kan je removen en nog weel meer
         private $tickets;  
 - user roles correspond to a series of authorizations. See security.yaml. Custom voter per object checks access
 - note that I'm setting the author as a string, not as an object, when creating a new post. When checking access to one's own posts, strings, not objects are compared
-
-- TO CHECK: not sure what I'm doing wrong. But I have a custom voter that doesn't care what's in the security.yaml file
-in the voter I have this 
+- But I have a custom voter that doesn't care what's in the security.yaml file
+    in the voter I have this 
             case 'POST_CREATE':
                 // (dd($user));
                 if ($this->security->isGranted('ROLE_CUSTOMER')) {
                     return true;
                 }
-and this works fine even when I remove POST_CREATE from security.yaml
--? am I mixing things up and using this role check where it shouldn't be used? 
--? what's the added value compared to just checking isGranted immediately in the router?
-            if ($security->isGranted('ROLE_CUSTOMER')) {
+    and this works fine even when I remove POST_CREATE from security.yaml
+    ? am I mixing things up and using this role check where it shouldn't be used? 
+    ? confusing because of how voters also watch for strings
+    X voter checks for strings. POST_CREATE just activates my own voter instead of (immediatelly) activiating ROLE-system (which it does in a second step)
+    X "Every role must start with ROLE_ (otherwise, things won't work as expected)" https://symfony.com/doc/current/security.html 
+    X now I have:
+    in security.yaml
+      role_hierarchy:
+          ROLE_ADMIN: [ROLE_POST_CREATE, ROLE_POST_VIEW, ROLE_ADMIN_TICKET] which gives ADMIN all these other roles as well
+    in TicketController
+        /**
+         * @Route("/{id}/edit", name="ticket_edit", methods={"GET","POST"})
+         */
+        public function edit(Request $request, Ticket $ticket): Response
+        {
+            if (!$this->isGranted('TICKET_EDIT', $ticket)) {
                 throw $this->createAccessDeniedException('No access!');
             }
--?? is the added value that I'm doing 2 checks: activating the voter with e.g. POST_CREATE + isGranted('ROLE_CUSTOMER)? If so, then there's no sense in rewriting this in security.yaml excect for having an overview. But this also consfuses(what causes what) + prone to errors if I write more
--?! or is this just repition and not a double check?
--? how many voters should fire?
--> review notes
+    in TicketVoter        
+            case 'TICKET_EDIT':
+                if ($this->security->isGranted('ROLE_ADMIN_TICKET')) {
+                    return true;
+                }
+                // logic to determine if the user can EDIT
+                // return true or false
+                break;
+    which gives the users with ROLE_ADMIN access to edit the ticket
+-? what's the added value compared to just checking isGranted immediately in the router?
+            if ($security->isGranted('ROLE_ADMIN_TICKET')) {
+                throw $this->createAccessDeniedException('No access!');
+            }
+    x? the ability to add checks that don't fit the mould of ROLE or IS_AUTHENTICATED, but also e.g. 
+            case 'TICKET_VIEW':
+                if ($ticket->getAuthor() == $user->getEmail()) {
+                    return true;
+                }
+
 
 ## TO DO'S
 - check routes. Need logical path for when not logged in and such and redirect to previous RELEVANT page. Think I'm also employing hard coded redirects sometimes and sometime that trait TargetPath or something
-- need to selectively display properties: serializer ... but is'nt that for API? Will need to cha
+- need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
 - clean this up and move lessons learned to notes
 - dev  branch in master branch mergen0
 

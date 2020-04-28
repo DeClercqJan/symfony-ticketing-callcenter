@@ -10,7 +10,9 @@ security:
         class: App\Entity\User
         property: email
   role_hierarchy:
-          ROLE_CUSTOMER: [POST_CREATE, POST_VIEW]
+      ROLE_ADMIN: [ROLE_POST_CREATE, ROLE_POST_VIEW, ROLE_ADMIN_TICKET]
+      ROLE_AGENT_1 : []
+      ROLE_CUSTOMER: [ROLE_POST_CREATE, ROLE_POST_VIEW]
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/

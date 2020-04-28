@@ -20,7 +20,7 @@ class TicketVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['POST_CREATE', 'POST_EDIT', 'POST_VIEW'])
+        return in_array($attribute, ['TICKET_CREATE', 'TICKET_VIEW', 'TICKET_EDIT'])
             && $ticket instanceof \App\Entity\Ticket;
     }
 
@@ -34,22 +34,27 @@ class TicketVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case 'POST_VIEW':
-                // if ($ticket->getAuthor() == $user->getEmail()) {
-                    return true;
-                // }
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
-            case 'POST_CREATE':
+            case 'TICKET_CREATE':
                 if ($this->security->isGranted('ROLE_CUSTOMER')) {
                     return true;
                 }
                 // logic to determine if the user can VIEW
                 // return true or false
                 break;
-            case
-            'POST_EDIT':
+            case 'TICKET_VIEW':
+                if ($ticket->getAuthor() == $user->getEmail()) {
+                    return true;
+                }
+                if ($this->security->isGranted('ROLE_ADMIN_TICKET')) {
+                    return true;
+                }
+                // logic to determine if the user can VIEW
+                // return true or false
+                break;
+            case 'TICKET_EDIT':
+                if ($this->security->isGranted('ROLE_ADMIN_TICKET')) {
+                    return true;
+                }
                 // logic to determine if the user can EDIT
                 // return true or false
                 break;
