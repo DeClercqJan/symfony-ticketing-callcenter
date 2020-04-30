@@ -19,6 +19,7 @@ class CommentFixture extends BaseFixture implements DependentFixtureInterface
             $comment->setIsCommentPublic($this->faker->boolean(60));
             $comment->setTicket($this->getRandomReference('tickets'));
             $comment->setUser($this->getRandomReference('usersCustomers'));
+            $comment->setAuthor($this->getRandomReference('usersCustomers'));
             return $comment;
         });
         // $product = new Product();

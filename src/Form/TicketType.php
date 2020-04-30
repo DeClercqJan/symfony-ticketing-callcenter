@@ -10,6 +10,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
@@ -30,16 +32,20 @@ class TicketType extends AbstractType
     {
         // default values added
         $builder
-            ->add('priorityLevel', null, [
+            ->add('priorityLevel', IntegerType::class, [
                 'empty_data' => '0',
             ])
-            ->add('externalStatusMessage', null, [
+            ->add('externalStatusMessage', TextType::class, [
                 'empty_data' => 'open',
             ])
-            ->add('ticketText')
+            ->add('ticketText', TextType::class)
 //            ->add('createdAt')
 //            ->add('updatedAt')
-            ->add('users')
+            ->add('users', EntityType::class, [
+                'class' => User::class,
+                'mapped' => false,
+                'empty_data' => 'null',
+            ])
             ->add('author', EmailType::class, [
                 'empty_data' => $this->security->getUser()->getUsername(),
             ]);

@@ -3,62 +3,64 @@
 {% block title %}Comment{% endblock %}
 
 {% block body %}
-    <h1>Comment</h1>
+<h1>Comment</h1>
 
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ comment.id }}</td>
-        </tr>
-        <tr>
-            <th>CommentText</th>
-            <td>{{ comment.commentText }}</td>
-        </tr>
-        <tr>
-            <th>IsCommentPublic</th>
-            <td>{{ comment.isCommentPublic ? 'Yes' : 'No' }}</td>
-        </tr>
-        <tr>
-            <th>CreatedAt</th>
-            <td>{{ comment.createdAt ? comment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
-            <th>UpdatedAt</th>
-            <td>{{ comment.updatedAt ? comment.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
-            <th>Users</th>
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Id</th>
+        <td>{{ comment.id }}</td>
+    </tr>
+    <tr>
+        <th>CommentText</th>
+        <td>{{ comment.commentText }}</td>
+    </tr>
+    <tr>
+        <th>IsCommentPublic</th>
+        <td>{{ comment.isCommentPublic ? 'Yes' : 'No' }}</td>
+    </tr>
+    <tr>
+        <th>CreatedAt</th>
+        <td>{{ comment.createdAt ? comment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+    </tr>
+    <tr>
+        <th>UpdatedAt</th>
+        <td>{{ comment.updatedAt ? comment.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+    </tr>
+    <tr>
+        <th>Users</th>
             <td>user id {{ comment.user.id }} <br>
                 user: {{ comment.user.email }} <br>
                 roles user : {% for role in comment.user.roles %}
                     {{ role }}
                 {% endfor %}
             </td>
-        </tr>
-        <tr>
-            <th>Ticket</th>
-            <td>Ticket id {{ comment.ticket.id }} <br>
-                TicketText: {{ comment.ticket.ticketText }} <br>
+    </tr>
+    <tr>
+        <th>Ticket</th>
+        <td>Ticket id {{ comment.ticket.id }} <br>
+            TicketText: {{ comment.ticket.ticketText }} <br>
+            {% if comment.ticket.users %}
                 {% for user in comment.ticket.users %}
-                    user: {{ user.email }}  <br>
-                    roles user : {% for role in user.roles %}
-                    {{ role }}
-                {% endfor %}
-                {% endfor %}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                user: {{ user.email }}  <br>
+                roles user : {% for role in user.roles %}
+                {{ role }}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+    </tbody>
+</table>
 
-    <a href="{{ path('comment_index_all') }}">to all comments(only for admin?) </a>
-    <a href="{{ path('comment_index_per_ticket', {'ticketid' : comment.ticket.id}) }}"> to comments per ticket</a>
-
-
-    {#    <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>#}
-    <a href="{{ path('comment_edit', {'ticketid' : comment.ticket.id, 'commentid': comment.id}) }}">edit</a>
-    <a href="{{ path('ticket_show', {'id' : comment.ticket.id}) }}">back to ticket</a>
+<a href="{{ path('comment_index_all') }}">to all comments(only for admin?) </a>
+<a href="{{ path('comment_index_per_ticket', {'ticketid' : comment.ticket.id}) }}"> to comments per ticket</a>
 
 
-    {{ include('comment/_delete_form.html.twig') }}
+{#    <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>#}
+<a href="{{ path('comment_edit', {'ticketid' : comment.ticket.id, 'commentid': comment.id}) }}">edit</a>
+<a href="{{ path('ticket_show', {'id' : comment.ticket.id}) }}">back to ticket</a>
+
+
+{{ include('comment/_delete_form.html.twig') }}
 {% endblock %}
