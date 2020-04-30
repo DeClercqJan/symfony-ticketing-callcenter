@@ -36,7 +36,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    <a href="{{ path('comment_index_all') }}">to all comments(only for admin?) </a>
     <a href="{{ path('comment_new', {'ticketid' : ticket.id }) }}">Create new</a>
-
+    <a href="{{ path('ticket_show', {'id' : ticket.id}) }}">back to ticket</a>
 {% endblock %}

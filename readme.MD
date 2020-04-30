@@ -12,6 +12,9 @@
 - will rely heavily on Symfonycasts code
 - gonna use basic article/id123/edit -like routing structure Appending commentcontroller to reflect this
 - privilging hierarchical ticket > comments, but also trying to provide overview of all comments while restricting/allowing actions in order to keep things logical
+- notable: can't create new comment from generic comment overviewpage
+? all/comments route maybe not only relevant for admin, but also for regular customers
+-> drawing lines on a piece of paper would probably help
 - note to self: how to deal with multiple parameters in url
     /**
      * @Route("/ticket/{ticketid}/comment/{commentid}", name="comment_show", methods={"GET"})
@@ -157,6 +160,7 @@ X met cascade kan je removen en nog weel meer
 - clean this up and move lessons learned to notes
 - dev  branch in master branch mergen0
 - ? how to set id of ticket as default value of comment in formbuilder. Able to do this for author, but now setting ticketid for comment in controller (not very consistent)
+- ? how to redirect to previous page (here: multiple pages pointing to comment edit endpoint)? TargetPathTrait appears to be for login. Tried passing hidden input field to form, but the medecine seems worse than the cure: https://stackoverflow.com/questions/51498650/redirect-two-steps-back-in-symfony
 
 # ORIGINAL ASSIGNMENT BELOW
 

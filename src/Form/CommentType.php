@@ -6,16 +6,35 @@ use App\Entity\Comment;
 use App\Entity\Ticket;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 class CommentType extends AbstractType
 {
-//    private $ticket;
+//    private $referer;
 //
-//    public function __construct(Ticket $ticket)
+//    public function __construct(Request $request)
+//    {;
+//        $this->referer = $request->headers->get('referer');
+//    }
+//    private $security;
+//
+//    public function __construct(Security $security)
 //    {
-//        $this->ticket = $ticket;
+//        $this->security = $security;
+//        // dd($security);
+//    }
+
+//    private $referer;
+//
+//    public function __construct(RequestStack $requestStack)
+//    {
+//        $this->referer = $requestStack->getCurrentRequest()->headers->get('referer');
+//        // dd($this->referer);
 //    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -29,8 +48,11 @@ class CommentType extends AbstractType
 //                'class' => Ticket::class,
 ////                'empty_data' => $this->ticket,
 //            ])
-            ->add('user')
-        ;
+//            ->add('referer', HiddenType::class, [
+//                'data' => $this->referer,
+//                    ])
+
+            ->add('user');
     }
 
     public function configureOptions(OptionsResolver $resolver)

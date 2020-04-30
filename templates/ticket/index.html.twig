@@ -82,9 +82,10 @@
             {% endfor %}
             </tbody>
         </table>
-        {% if app.user.authoredTickets is empty %}
-            <p>no records with your name on were found</p>
+        {% if app.user.tickets is empty %}
+            <p>no records were assigned to you</p>
         {% endif %}
     {% endif %}
     <a href="{{ path('ticket_new') }}">Create new</a>
+    <a href="{{ path('comment_index_all') }}">to all comments(only for admin?) </a>
 {% endblock %}

@@ -8,12 +8,16 @@ use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class CommentController extends AbstractController
 {
+    use TargetPathTrait;
+
     /**
      * @Route("ticket/all/comment", name="comment_index_all", methods={"GET"})
      */
@@ -70,9 +74,8 @@ class CommentController extends AbstractController
      * @ParamConverter("ticket", options={"mapping": {"ticketid" : "id"}})
      * @ParamConverter("comment", options={"mapping": {"commentid" : "id"}})
      */
-    public function show(Ticket $ticket, Comment $comment): Response
+    public function show(Ticket $ticket, Comment $comment, Request $request): Response
     {
-//        dd($ticket);
         return $this->render('comment/show.html.twig', [
             'comment' => $comment,
         ]);
@@ -85,13 +88,19 @@ class CommentController extends AbstractController
      */
     public function edit(Request $request, Comment $comment): Response
     {
+//        $uri = $request->headers->get('referer');
+//        dd($uri);
+//        $test = $this->saveTargetPath($request->getSession(), 'main', $uri);
+//        dd($targetPath);
+        // $previous_page = $request->headers->get('referer');
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('comment_index');
+//            $targetPath = $this->getTargetPath($request->getSession(), 'main');
+//            dd($targetPath);
+//dd($form);
+             return $this->redirectToRoute('ticket_show', array('id' => $comment->getTicket()->getId()));
         }
 
         return $this->render('comment/edit.html.twig', [
@@ -105,7 +114,7 @@ class CommentController extends AbstractController
      */
     public function delete(Request $request, Comment $comment): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($comment);
             $entityManager->flush();
