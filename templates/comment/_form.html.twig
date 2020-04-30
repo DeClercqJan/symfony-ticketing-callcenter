@@ -1,12 +1,11 @@
 {{ form_start(form) }}
-{#    {{ form_widget(form) }}#}
-{#{% if is_granted('ROLE_POST_CREATE') %}#}
+{% if is_granted('ROLE_COMMENT_CREATE') %}
     {{ form_row(form.commentText) }}
-{#{% endif %}#}
-{#{% if is_granted('ROLE_ADMIN_TICKET') %}#}
+{% endif %}
+{% if is_granted('ROLE_COMMENT_EDIT') %}
     {{ form_row(form.isCommentPublic) }}
-    {#    {{ form_row(form.author) }}#}
-{#{% endif %}#}
+        {{ form_row(form.author) }}
+{% endif %}
 {{ form_widget(form._token) }}
 <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form, {'render_rest': false}) }}

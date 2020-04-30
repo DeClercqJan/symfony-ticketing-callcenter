@@ -49,6 +49,10 @@ class CommentController extends AbstractController
     public function new(Ticket $ticket, Request $request): Response
     {
         $comment = new Comment();
+        if (!$this->isGranted('COMMENT_CREATE', $comment)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
@@ -76,6 +80,10 @@ class CommentController extends AbstractController
      */
     public function show(Ticket $ticket, Comment $comment, Request $request): Response
     {
+        if (!$this->isGranted('COMMENT_VIEW', $comment)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+
         return $this->render('comment/show.html.twig', [
             'comment' => $comment,
         ]);
@@ -86,8 +94,11 @@ class CommentController extends AbstractController
      * @ParamConverter("ticket", options={"mapping": {"ticketid" : "id"}})
      * @ParamConverter("comment", options={"mapping": {"commentid" : "id"}})
      */
-    public function edit(Request $request, Comment $comment): Response
+    public function edit(Request $request, Ticket $ticket, Comment $comment): Response
     {
+        if (!$this->isGranted('COMMENT_EDIT', $comment)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
 //        $uri = $request->headers->get('referer');
 //        dd($uri);
 //        $test = $this->saveTargetPath($request->getSession(), 'main', $uri);
@@ -114,6 +125,10 @@ class CommentController extends AbstractController
      */
     public function delete(Request $request, Comment $comment): Response
     {
+        if (!$this->isGranted('COMMENT_DELETE', $comment)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+
         if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($comment);

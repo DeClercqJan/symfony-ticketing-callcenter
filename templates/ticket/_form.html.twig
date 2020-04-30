@@ -1,9 +1,9 @@
 {{ form_start(form) }}
 {#    {{ form_widget(form) }}#}
-{% if is_granted('ROLE_POST_CREATE') %}
+{% if is_granted('ROLE_TICKET_CREATE') %}
     {{ form_row(form.ticketText) }}
 {% endif %}
-{% if is_granted('ROLE_ADMIN_TICKET') %}
+{% if is_granted('ROLE_TICKET_EDIT') %}
     {{ form_row(form.priorityLevel) }}
     {{ form_row(form.externalStatusMessage) }}
     {{ form_row(form.users) }}

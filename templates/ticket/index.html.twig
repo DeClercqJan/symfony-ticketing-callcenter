@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Ticket index</h1>
-    {% if is_granted('ROLE_ADMIN_TICKET') %}
+    {% if is_granted('ROLE_TICKET_ADMIN') %}
         <h2>Authored tickets</h2>
     {% endif %}
     <table class="table">
@@ -45,7 +45,7 @@
     {% if app.user.authoredTickets is empty %}
         <p>no records with your name on were found</p>
     {% endif %}
-    {% if is_granted('ROLE_ADMIN_TICKET') %}
+    {% if is_granted('ROLE_TICKET_ADMIN') %}
         <h2>Assigned tickets</h2>
         <table class="table">
             <thead>

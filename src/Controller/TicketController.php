@@ -97,6 +97,10 @@ class TicketController extends AbstractController
      */
     public function delete(Request $request, Ticket $ticket): Response
     {
+        if (!$this->isGranted('TICKET_DELETE', $ticket)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$ticket->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($ticket);

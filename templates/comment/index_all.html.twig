@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Comment index</h1>
-    {% if is_granted('ROLE_ADMIN_COMMENT') %}
+    {% if is_granted('ROLE_COMMENT_ADMIN') %}
         <h2>Authored comments</h2>
     {% endif %}
     <table class="table">
@@ -43,7 +43,7 @@
     {% if app.user.authoredComments is empty %}
         <p>no records with your name on were found</p>
     {% endif %}
-    {% if is_granted('ROLE_ADMIN_COMMENT') %}
+    {% if is_granted('ROLE_COMMENT_ADMIN') %}
         <h2>Comments of assigned tickets</h2>
         <table class="table">
             <thead>
