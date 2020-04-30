@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comment index{% endblock %}
+
+{% block body %}
+<h1>Comment index</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>CommentText</th>
+        <th>IsCommentPublic</th>
+        <th>CreatedAt</th>
+        <th>UpdatedAt</th>
+        <th>actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for comment in comments %}
+    <tr>
+        <td>{{ comment.id }}</td>
+        <td>{{ comment.commentText }}</td>
+        <td>{{ comment.isCommentPublic ? 'Yes' : 'No' }}</td>
+        <td>{{ comment.createdAt ? comment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+        <td>{{ comment.updatedAt ? comment.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+        <td>
+            <a href="{{ path('comment_show', {'ticketid' : comment.ticket.id, 'commentid': comment.id}) }}">show</a>
+            <a href="{{ path('comment_edit', {'ticketid' : comment.ticket.id, 'commentid': comment.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

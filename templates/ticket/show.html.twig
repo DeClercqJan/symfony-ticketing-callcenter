@@ -55,6 +55,8 @@
                     roles user: {% for role in comment.user.roles %}
                         {{ role }}
                     {% endfor %}
+                    <a href="{{ path('comment_show', {'ticketid' : comment.ticket.id, 'commentid' : comment.id}) }}">to
+                        comment</a>
                 </td>
             {% endfor %}
         </tr>
@@ -65,6 +67,8 @@
     <a href="{{ path('ticket_index') }}">back to list</a>
 
     <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+
+    <a href="{{ path('comment_new', {'ticketid' : ticket.id}) }}">Create new comment</a>
 
     {{ include('ticket/_delete_form.html.twig') }}
 {% endblock %}

@@ -7,5 +7,8 @@
 
     {{ include('comment/_form.html.twig') }}
 
-    <a href="{{ path('comment_index') }}">back to list</a>
+{#    <a href="{{ path('comment_index_all') }}">back to all comments</a>#}
+{#    <a href="{{ path('comment_index_per_ticket', {'ticketid' : ticket.id}) }}">back to comments per ticket</a>#}
+    <a href="{{ path('ticket_show', {'id' : ticket.id}) }}">back to ticket</a>
+
 {% endblock %}

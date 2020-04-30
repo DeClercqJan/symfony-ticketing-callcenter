@@ -10,7 +10,16 @@
 - timestampable trait, which I'm expecting to need in order to calculate whether or not the comment made by a user in response to a request for feedback is the right one in order to continue the track
 - will start out with the 'perfect' lifecycle a ticket can follow. That excellent service we all expect and never experiences
 - will rely heavily on Symfonycasts code
-- gonna use basic article/id123/edit -like routing structure
+- gonna use basic article/id123/edit -like routing structure Appending commentcontroller to reflect this
+- privilging hierarchical ticket > comments, but also trying to provide overview of all comments while restricting/allowing actions in order to keep things logical
+- note to self: how to deal with multiple parameters in url
+    /**
+     * @Route("/ticket/{ticketid}/comment/{commentid}", name="comment_show", methods={"GET"})
+     * @ParamConverter("ticket", options={"mapping": {"ticketid" : "id"}})
+     * @ParamConverter("comment", options={"mapping": {"commentid" : "id"}})
+     */
+    public function show(Ticket $ticket, Comment $comment): Response
+    {
 - getRoles always returns ROLE_CUSTOMER. in security. yaml I may repeat myself in role hierarchy, but I think it's better for clarity as one (me) easily forgets that all registered users have the (related) roles of the customer
 - fixtures for dummy data
 - made functional login form using maker using make:auth and tinkering a bit in security.yaml and such. But can't see username of logged in user. Moving on) 
@@ -138,7 +147,8 @@ X met cascade kan je removen en nog weel meer
             {{ form_end(form, {'render_rest': false}) }}
 - storing real users as authors of tickets (so tickets now have 2 properties in different relations with users)
 - in order for form to work, I had to build a datatransform that transforms user and their email back and forth
-(got lucky with a combination of https://symfonycasts.com/screencast/symfony-forms/data-transformer + https://symfony.com/doc/current/form/data_transformers.html)
+(got lucky with a combination of https://symfonycasts.com/screencast/symfony-forms/custom-field-type#play (vanaf minuut 3 en daaropvolgende casts) + https://symfony.com/doc/current/form/data_transformers.html)
+- routing 
           
             
 ## TO DO'S
@@ -146,6 +156,7 @@ X met cascade kan je removen en nog weel meer
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
 - clean this up and move lessons learned to notes
 - dev  branch in master branch mergen0
+- ? how to set id of ticket as default value of comment in formbuilder. Able to do this for author, but now setting ticketid for comment in controller (not very consistent)
 
 # ORIGINAL ASSIGNMENT BELOW
 
