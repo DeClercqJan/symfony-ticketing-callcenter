@@ -51,8 +51,8 @@
             {% for comment in ticket.comments %}
                 <td>comment id {{ comment.id }} <br>
                     commentText: {{ comment.commentText }} <br>
-                    user: {{ comment.user }} }} <br>
-                    roles user: {% for role in comment.user.roles %}
+                    author: {{ comment.author }} }} <br>
+                    roles author: {% for role in comment.author.roles %}
                         {{ role }}
                     {% endfor %}
                     <a href="{{ path('comment_show', {'ticketid' : comment.ticket.id, 'commentid' : comment.id}) }}">to

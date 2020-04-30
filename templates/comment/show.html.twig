@@ -28,10 +28,10 @@
         <td>{{ comment.updatedAt ? comment.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
     </tr>
     <tr>
-        <th>Users</th>
-            <td>user id {{ comment.user.id }} <br>
-                user: {{ comment.user.email }} <br>
-                roles user : {% for role in comment.user.roles %}
+        <th>Author</th>
+            <td>author id {{ comment.author.id }} <br>
+                author: {{ comment.author.email }} <br>
+                roles author : {% for role in comment.author.roles %}
                     {{ role }}
                 {% endfor %}
             </td>
