@@ -4,9 +4,9 @@
 
 {% block body %}
     <h1>Comment index</h1>
-    {#        {% if is_granted('ROLE_ADMIN_TICKET') %}#}
-    {#            <h2>Authored comments</h2>#}
-    {#        {% endif %}#}
+    {% if is_granted('ROLE_ADMIN_COMMENT') %}
+        <h2>Authored comments</h2>
+    {% endif %}
     <table class="table">
         <thead>
         <tr>
@@ -20,19 +20,19 @@
         </thead>
         <tbody>
         {% for comment in comments %}
-            {#        {% if app.user == comment.author %}#}
-            <tr>
-                <td>{{ comment.id }}</td>
-                <td>{{ comment.commentText }}</td>
-                <td>{{ comment.isCommentPublic ? 'Yes' : 'No' }}</td>
-                <td>{{ comment.createdAt ? comment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ comment.updatedAt ? comment.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('comment_show', {'ticketid' : comment.ticket.id, 'commentid': comment.id}) }}">show</a>
-                    <a href="{{ path('comment_edit', {'ticketid' : comment.ticket.id, 'commentid': comment.id}) }}">edit</a>
-                </td>
-            </tr>
-            {#    {% endif %}#}
+            {% if app.user == comment.author %}
+                <tr>
+                    <td>{{ comment.id }}</td>
+                    <td>{{ comment.commentText }}</td>
+                    <td>{{ comment.isCommentPublic ? 'Yes' : 'No' }}</td>
+                    <td>{{ comment.createdAt ? comment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ comment.updatedAt ? comment.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a href="{{ path('comment_show', {'ticketid' : comment.ticket.id, 'commentid': comment.id}) }}">show</a>
+                        <a href="{{ path('comment_edit', {'ticketid' : comment.ticket.id, 'commentid': comment.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% endif %}
         {% else %}
             <tr>
                 <td colspan="6">no records found</td>
@@ -40,10 +40,10 @@
         {% endfor %}
         </tbody>
     </table>
-    {#    {% if app.user.authoredComments is empty %}#}
-    {#        <p>no records with your name on were found</p>#}
-    {#    {% endif %}#}
-    {% if is_granted('ROLE_ADMIN_TICKET') %}
+    {% if app.user.authoredComments is empty %}
+        <p>no records with your name on were found</p>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN_COMMENT') %}
         <h2>Comments of assigned tickets</h2>
         <table class="table">
             <thead>
@@ -78,9 +78,9 @@
             {% endfor %}
             </tbody>
         </table>
-{#        {% if app.user.authoredTickets is empty %}#}
-{#            <p>no records with your name on were found</p>#}
-{#        {% endif %}#}
+        {% if app.user.authoredTickets is empty %}
+            <p>no records with your name on were found</p>
+        {% endif %}
     {% endif %}
     <a href="{{ path('ticket_index') }}">to tickets</a>
 {% endblock %}

@@ -154,7 +154,6 @@ X met cascade kan je removen en nog weel meer
           
             
 ## TO DO'S
-- ! need to change names: comments have users, which are its author (no need to assign). Tickets have users (assigned to) + authors.
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
 - clean this up and move lessons learned to notes
 - dev  branch in master branch mergen0
