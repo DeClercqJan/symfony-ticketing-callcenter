@@ -151,15 +151,21 @@ X met cascade kan je removen en nog weel meer
 - storing real users as authors of tickets (so tickets now have 2 properties in different relations with users)
 - in order for form to work, I had to build a datatransform that transforms user and their email back and forth
 (got lucky with a combination of https://symfonycasts.com/screencast/symfony-forms/custom-field-type#play (vanaf minuut 3 en daaropvolgende casts) + https://symfony.com/doc/current/form/data_transformers.html)
-          
+- use constants for stuff like  "open" status message wthat will be used in if-checks
+X passing variable to email twig template to send full url
+    <a href="{{ url('ticket_show', {id : ticketid}) }}">View ticket</a>
+
             
 ## TO DO'S
+- once I've got my exteran
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
 - clean this up and move lessons learned to notes
 - dev  branch in master branch mergen0
 - ? how to set id of ticket as default value of comment in formbuilder. Able to do this for author, but now setting ticketid for comment in controller (not very consistent)
 - ? how to redirect to previous page (here: multiple pages pointing to comment edit endpoint)? TargetPathTrait appears to be for login. Tried passing hidden input field to form, but the medecine seems worse than the cure: https://stackoverflow.com/questions/51498650/redirect-two-steps-back-in-symfony
 - for business logic: it is now possible to create a ticket without assigngin a user. These need either a) to be displayed in some admin section in order to be reassigned or b) need to be assigned automatically
+- in several controller using mailer in various ways. Can I put this in some service and streamline it?
+- 
 
 # ORIGINAL ASSIGNMENT BELOW
 

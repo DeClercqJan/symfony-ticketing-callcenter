@@ -12,6 +12,12 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Ticket
 {
+    const EXTERNAL_STATUS_MESSAGE_OPEN = 'open';
+    const EXTERNAL_STATUS_MESSAGE_PROGRESS_ = 'in progress';
+    const EXTERNAL_STATUS_MESSAGE_WAITING = 'waiting for customer feedback';
+    const EXTERNAL_STATUS_MESSAGE_CLOSED = 'closed';
+    const EXTERNAL_STATUS_MESSAGE_WONT = 'won\'t fix';
+
     use TimestampableEntity;
 
     /**
@@ -175,6 +181,7 @@ class Ticket
 
         return $this;
     }
+
     public function getAuthor(): ?User
     {
         return $this->author;
