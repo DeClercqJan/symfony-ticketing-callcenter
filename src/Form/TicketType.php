@@ -43,8 +43,7 @@ class TicketType extends AbstractType
 //            ->add('updatedAt')
             ->add('users', EntityType::class, [
                 'class' => User::class,
-                'mapped' => false,
-                'empty_data' => 'null',
+                'mapped' => false
             ])
             ->add('author', EmailType::class, [
                 'empty_data' => $this->security->getUser()->getUsername(),

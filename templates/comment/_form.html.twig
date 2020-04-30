@@ -5,7 +5,6 @@
 {#{% endif %}#}
 {#{% if is_granted('ROLE_ADMIN_TICKET') %}#}
     {{ form_row(form.isCommentPublic) }}
-    {{ form_row(form.user) }}
     {#    {{ form_row(form.author) }}#}
 {#{% endif %}#}
 {{ form_widget(form._token) }}

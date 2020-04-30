@@ -53,17 +53,11 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     private $authoredTickets;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
-     */
-    private $authoredComments;
-
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->authoredTickets = new ArrayCollection();
-        $this->authoredComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -221,36 +215,5 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         return $this->getEmail();
         // TODO: Implement eraseCredentials() method.
-    }
-
-    /**
-     * @return Collection|Comment[]
-     */
-    public function getAuthoredComments(): Collection
-    {
-        return $this->authoredComments;
-    }
-
-    public function addAuthoredComment(Comment $authoredComment): self
-    {
-        if (!$this->authoredComments->contains($authoredComment)) {
-            $this->authoredComments[] = $authoredComment;
-            $authoredComment->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuthoredComment(Comment $authoredComment): self
-    {
-        if ($this->authoredComments->contains($authoredComment)) {
-            $this->authoredComments->removeElement($authoredComment);
-            // set the owning side to null (unless already changed)
-            if ($authoredComment->getAuthor() === $this) {
-                $authoredComment->setAuthor(null);
-            }
-        }
-
-        return $this;
     }
 }

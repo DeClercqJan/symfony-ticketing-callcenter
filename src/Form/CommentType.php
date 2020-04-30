@@ -37,15 +37,12 @@ class CommentType extends AbstractType
             ->add('isCommentPublic')
 //            ->add('createdAt')
 //            ->add('updatedAt')
-            ->add('author', EmailType::class, [
+            ->add('user', EmailType::class, [
                 'empty_data' => $this->security->getUser()->getUsername(),
-            ])
+            ]);
         $builder
-            ->get('author')
+            ->get('user')
             ->addModelTransformer($this->modelTransformer);
-//        $builder
-//            ->get('user')
-//            ->addModelTransformer($this->modelTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)
