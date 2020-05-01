@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Tag;
+use App\Entity\Task;
 use App\Entity\Ticket;
+use App\Form\TaskType;
 use App\Form\TicketType;
 use App\Repository\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -128,9 +131,12 @@ class TicketController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // dd($form);
             $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
-            $this->getDoctrine()->getManager()->flush();
-
+            $entityManager = $this->getDoctrine()->getManager();
+            $ticket->setExternalStatusMessage('open');
+            $entityManager->persist($ticket);
+            $entityManager->flush();
             return $this->redirectToRoute('ticket_index');
         }
 

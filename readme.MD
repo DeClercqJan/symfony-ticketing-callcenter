@@ -170,6 +170,7 @@ X able to reproduce symfonydocs example of adding new records in associated enti
 
       
 ## TO DO'S
+- remove code pertaining to tasks and tasks, don't forget jquery
 - once I've got my exteran
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
 - clean this up and move lessons learned to notes

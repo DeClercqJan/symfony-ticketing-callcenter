@@ -8,8 +8,14 @@
     {{ form_start(form) }}
     {#    {{ form_widget(form) }}#}
     {% if is_granted('ROLE_TICKET_REOPEN') %}
-        <ul class="comments" data-prototype="{{ form_row(form.comments.vars.prototype.commentText) }}"></ul>
-        <ul class="comments" data-prototype="{{ form_row(form.comments.vars.prototype.isCommentPublic) }}"></ul>
+        <ul class="comments" data-prototype="{{ form_widget(form.comments.vars.prototype.commentText)|e('html_attr') }}">
+            {% for comment in form.comments %}
+                <li>{{ form_row(comment.commentText) }}</li>
+            {% endfor %}
+        </ul>
+
+
+{#        <ul class="comments" data-prototype="{{ form_row(form.comments.vars.prototype.commentText) }}"></ul>#}
 
         {#        {{ form_row(form.comments) }}#}
         {#        <ul class="tags">#}
@@ -25,5 +31,7 @@
 
     <a href="{{ path('ticket_index') }}">to tickets</a>
     <a href="{{ path('ticket_show', {'id' : ticket.id}) }}">back to ticket</a>
-
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}

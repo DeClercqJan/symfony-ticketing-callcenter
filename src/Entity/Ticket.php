@@ -43,7 +43,7 @@ class Ticket
     private $ticketText;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="ticket", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="ticket", cascade={"remove", "persist"})
      */
     private $comments;
 
@@ -112,7 +112,7 @@ class Ticket
         return $this;
     }
 
-    public function getTicketText(): ?string
+    public function getTicketText(): string
     {
         return $this->ticketText;
     }

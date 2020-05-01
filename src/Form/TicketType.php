@@ -40,7 +40,10 @@ class TicketType extends AbstractType
             ->add('externalStatusMessage', TextType::class, [
                 'empty_data' => 'open',
             ])
-            ->add('ticketText', TextType::class)
+            ->add('ticketText', TextType::class, [
+                    'empty_data' => 'testemptydatadefault',
+                ]
+            )
 //            ->add('createdAt')
 //            ->add('updatedAt')
             ->add('users', EntityType::class, [
