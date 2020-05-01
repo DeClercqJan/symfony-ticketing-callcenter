@@ -61,6 +61,7 @@ class TicketType extends AbstractType
                 CollectionType::class,
                 array(
                     'entry_type' => CommentTypeEmbeddedForm::class,
+                    'entry_options' => ['label' => false],
 //                    'label' => 'Support Entries',
 //                    'error_bubbling' => true,
                     'allow_add' => true,
