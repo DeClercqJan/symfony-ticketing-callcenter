@@ -62,22 +62,27 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ticketid = $ticket->getId();
-            $ticketAuthor = $ticket->getAuthor();
             $entityManager = $this->getDoctrine()->getManager();
+
+            $ticketAuthor = $ticket->getAuthor();
             $user = $security->getUser();
+            $ticketid = $ticket->getId();
             if ($ticketAuthor === $user && $ticket::EXTERNAL_STATUS_MESSAGE_WAITING === $ticket->getExternalStatusMessage()) {
-                // may need to change this, dependeing wheter or not I allow multiple agents for one ticket or not
                 $agent = $ticket->getUsers();
-                $agentEmail = $agent[0]->getEmail();
+                if (!$agent->isEmpty()) {
+                    $agentEmail = $agent->getEmail();
+                }
+                if ($agent->isEmpty()) {
+                    $agentEmail = "customerrespondedbutnoagenthasbeenassigned@moshimoshicallcenter.com";
+                }
                 $email = (new TemplatedEmail())
                     ->from(new Address('customerresponded@moshimoshicallcenter.com', 'Reset Password Bot'))
-                    // to do
                     ->to($agentEmail)
                     ->subject('customer responded to request for feedback')
                     ->htmlTemplate('comment/customer_responded_email.html.twig')
                     ->context(['ticketid' => $ticketid]);
                 $mailer->send($email);
+
                 $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_PROGRESS_);
                 $entityManager->persist($ticket);
             }

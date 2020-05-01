@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reopen Ticket{% endblock %}
+
+{% block body %}
+    <h1>Edit Ticket</h1>
+
+    {{ include('ticket/_form.html.twig', {'button_label': 'Reopen'}) }}
+
+    <a href="{{ path('ticket_index') }}">to tickets</a>
+    <a href="{{ path('ticket_show', {'id' : ticket.id}) }}">back to ticket</a>
+
+
+    {{ include('ticket/_delete_form.html.twig') }}
+{% endblock %}

@@ -62,10 +62,25 @@ class Ticket
      */
     private $author;
 
+    private $canReopenUntil;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->users = new ArrayCollection();
+    }
+
+    public function setCanReopenUntil(): self
+    {
+        //$this->canReopenUntil = new \DateTime('-1 hour');
+        $this->canReopenUntil = new \DateTime('+1 hour');
+        return $this;
+    }
+
+    public function getCanReopenUntil(): bool
+
+    {
+        return $this->canReopenUntil <= new \DateTime();
     }
 
     public function getId(): ?int
@@ -167,7 +182,6 @@ class Ticket
 
         return $this;
     }
-
 
     public function __toString(): string
     {

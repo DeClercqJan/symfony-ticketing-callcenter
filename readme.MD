@@ -163,7 +163,7 @@ X passing variable to email twig template to send full url
 - dev  branch in master branch mergen0
 - ? how to set id of ticket as default value of comment in formbuilder. Able to do this for author, but now setting ticketid for comment in controller (not very consistent)
 - ? how to redirect to previous page (here: multiple pages pointing to comment edit endpoint)? TargetPathTrait appears to be for login. Tried passing hidden input field to form, but the medecine seems worse than the cure: https://stackoverflow.com/questions/51498650/redirect-two-steps-back-in-symfony
-- for business logic: it is now possible to create a ticket without assigngin a user. These need either a) to be displayed in some admin section in order to be reassigned or b) need to be assigned automatically
+- for business logic: it is now possible to create a ticket without assigngin a user. These need either a) to be displayed in some admin section in order to be reassigned or b) need to be assigned automatically. Make sure 
 - in several controller using mailer in various ways. Can I put this in some service and streamline it?
 - 
 

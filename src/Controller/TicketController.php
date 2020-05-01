@@ -109,4 +109,34 @@ class TicketController extends AbstractController
 
         return $this->redirectToRoute('ticket_index');
     }
+
+    /**
+     * @Route("/{id}/reopen", name="ticket_reopen", methods={"GET","POST"})
+     */
+    public function reopen(Request $request, Ticket $ticket): Response
+    {
+        if (!$this->isGranted('TICKET_REOPEN', $ticket)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+        $ticket->setCanReopenUntil();
+        // dd($ticket->getCanReopenUntil());
+        if ($ticket->getCanReopenUntil()) {
+            throw $this->createAccessDeniedException('You can only reopen a ticket up until an hour after it has been been closed !');
+        }
+
+        $form = $this->createForm(TicketType::class, $ticket);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('ticket_index');
+        }
+
+        return $this->render('ticket/reopen.html.twig', [
+            'ticket' => $ticket,
+            'form' => $form->createView(),
+        ]);
+    }
 }

@@ -1,6 +1,6 @@
 {{ form_start(form) }}
 {#    {{ form_widget(form) }}#}
-{% if is_granted('ROLE_TICKET_CREATE') %}
+{% if is_granted('ROLE_TICKET_CREATE') or is_granted('ROLE_TICKET_REOPEN')%}
     {{ form_row(form.ticketText) }}
 {% endif %}
 {% if is_granted('ROLE_TICKET_EDIT') %}
@@ -10,5 +10,6 @@
 {#    {{ form_row(form.author) }}#}
 {% endif %}
 {{ form_widget(form._token) }}
+{# button label is overwritten elsewhere #}
 <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form, {'render_rest': false}) }}

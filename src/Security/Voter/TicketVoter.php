@@ -20,7 +20,7 @@ class TicketVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['TICKET_CREATE', 'TICKET_VIEW', 'TICKET_EDIT', 'TICKET_DELETE'])
+        return in_array($attribute, ['TICKET_CREATE', 'TICKET_VIEW', 'TICKET_EDIT', 'TICKET_DELETE', 'TICKET_REOPEN'])
             && $ticket instanceof \App\Entity\Ticket;
     }
 
@@ -65,6 +65,14 @@ class TicketVoter extends Voter
                 // logic to determine if the user can EDIT
                 // return true or false
                 break;
+            case 'TICKET_REOPEN':
+                if ($this->security->isGranted('ROLE_TICKET_REOPEN')) {
+                    return true;
+                }
+                // logic to determine if the user can EDIT
+                // return true or false
+                break;
+
         }
 
         return false;
