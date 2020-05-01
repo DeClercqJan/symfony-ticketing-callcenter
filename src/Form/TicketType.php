@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Comment;
 use App\Entity\Ticket;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -9,6 +10,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -48,7 +50,24 @@ class TicketType extends AbstractType
             ])
             ->add('author', EmailType::class, [
                 'empty_data' => $this->security->getUser()->getUsername(),
-            ]);
+            ])
+//            ->add('comments', EntityType::class, [
+//                'class' => Comment::class,
+//                'multiple' => true,
+//                'by_reference' => false,
+//            ])
+            ->add(
+                'comments',
+                CollectionType::class,
+                array(
+                    'entry_type' => CommentTypeEmbeddedForm::class,
+//                    'label' => 'Support Entries',
+//                    'error_bubbling' => true,
+                    'allow_add' => true,
+                    'by_reference' => false,
+//                    'cascade_validation' => true,
+                )
+            );
 
         $builder
             ->get('author')
