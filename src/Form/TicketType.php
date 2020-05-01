@@ -14,7 +14,10 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
@@ -40,9 +43,7 @@ class TicketType extends AbstractType
             ->add('externalStatusMessage', TextType::class, [
                 'empty_data' => 'open',
             ])
-            ->add('ticketText', TextType::class, [
-                    'empty_data' => 'testemptydatadefault',
-                ]
+            ->add('ticketText', TextType::class
             )
 //            ->add('createdAt')
 //            ->add('updatedAt')
@@ -63,7 +64,7 @@ class TicketType extends AbstractType
                 'comments',
                 CollectionType::class,
                 array(
-                    'entry_type' => CommentTypeEmbeddedForm::class,
+                    'entry_type' => CommentTypeReopenmbeddedForm::class,
                     'entry_options' => ['label' => false],
 //                    'label' => 'Support Entries',
 //                    'error_bubbling' => true,
@@ -76,6 +77,22 @@ class TicketType extends AbstractType
         $builder
             ->get('author')
             ->addModelTransformer($this->modelTransformer);
+
+        // good idea, but onyl for when you leave a field blank. Does not work if field is not rendered
+//        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+//
+//            /** @var array $requestData */
+//            $requestData = $event->getData();
+//            dd($requestData);
+//            /** @var Ticket $ticket */
+//            $ticket = $event->getForm()->getData();
+//
+//            if ($ticket && !$requestData['commentText']) {
+//                $requestData['ticketText'] = $ticket->getTicketText();
+//            }
+//
+//            $event->setData($requestData);
+//        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -84,4 +101,6 @@ class TicketType extends AbstractType
             'data_class' => Ticket::class,
         ]);
     }
+
+
 }

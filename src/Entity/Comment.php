@@ -53,9 +53,8 @@ class Comment
         return $this->commentText;
     }
 
-    public function setCommentText(?string $commentText): self
+    public function setCommentText(string $commentText): self
     {
-//        dd($commentText);
         $this->commentText = $commentText;
 
         return $this;

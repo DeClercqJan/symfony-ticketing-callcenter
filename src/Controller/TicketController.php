@@ -7,6 +7,7 @@ use App\Entity\Task;
 use App\Entity\Ticket;
 use App\Form\TaskType;
 use App\Form\TicketType;
+use App\Form\TicketTypeReopen;
 use App\Repository\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,7 +128,7 @@ class TicketController extends AbstractController
             throw $this->createAccessDeniedException('You can only reopen a ticket up until an hour after it has been been closed !');
         }
 
-        $form = $this->createForm(TicketType::class, $ticket);
+        $form = $this->createForm(TicketTypeReopen::class, $ticket);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -135,6 +136,7 @@ class TicketController extends AbstractController
             $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
             $entityManager = $this->getDoctrine()->getManager();
             $ticket->setExternalStatusMessage('open');
+            // persisting related comments happens by way of cascade="persist" annotation
             $entityManager->persist($ticket);
             $entityManager->flush();
             return $this->redirectToRoute('ticket_index');

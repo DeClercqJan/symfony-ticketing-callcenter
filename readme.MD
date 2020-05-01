@@ -154,6 +154,7 @@ X met cascade kan je removen en nog weel meer
 - use constants for stuff like  "open" status message wthat will be used in if-checks
 X passing variable to email twig template to send full url
     <a href="{{ url('ticket_show', {id : ticketid}) }}">View ticket</a>
+- on reopening ticket, one can comment. Form is rudimentary and needs to be cleaned up, but not capable of doing so at the moment.
 X able to reproduce symfonydocs example of adding new records in associated entity via the form of another related entity. Using javascript/jquery. Based on symfonydocs example, but had to fill in many blanks"
     als ik ticket wil laten heropenen, is dat op niveau van ticket
     maar ik wil daar dan een comment door de gebruiker bij. Dat is op het niveau van comment
@@ -167,9 +168,15 @@ X able to reproduce symfonydocs example of adding new records in associated enti
     https://www.jetbrains.com/help/phpstorm/installing-and-removing-external-software-using-node-package-manager.html#
     dan jquery doen werken. Foutmeldingen checken
     nog annotations toegevoegd zodat related tags ook worden persist naar database
-
+    {% if ticket.externalStatusMessage is same as (constant('EXTERNAL_STATUS_MESSAGE_CLOSED', ticket))
       
 ## TO DO'S
+- DIT NOG ERGENS ZETTEN IN CONTROLLER NA CLOSEN VAN TICKET (heropenen al gedaan)
+          $ticket->setCanReopenUntil();
+          // dd($ticket->());
+- /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.
+    ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. Also, jquery rendering is another thing
+-> learn more over Forms! 
 - remove code pertaining to tasks and tasks, don't forget jquery
 - once I've got my exteran
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick

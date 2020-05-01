@@ -5,19 +5,23 @@ namespace App\Form;
 use App\Entity\Comment;
 use App\Entity\Ticket;
 use App\Entity\User;
-use Doctrine\DBAL\Types\BooleanType;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
-class CommentTypeEmbeddedForm extends AbstractType
+class TicketTypeReopen extends AbstractType
 {
     private $security;
 
@@ -33,22 +37,25 @@ class CommentTypeEmbeddedForm extends AbstractType
     {
         // default values added
         $builder
-            ->add('commentText', TextType::class)
-            ->add('isCommentPublic')
-//            ->add('createdAt')
-//            ->add('updatedAt')
-            ->add('author', EmailType::class, [
-                'empty_data' => $this->security->getUser()->getUsername(),
-            ]);
-        $builder
-            ->get('author')
-            ->addModelTransformer($this->modelTransformer);
+            ->add(
+                'comments',
+                CollectionType::class,
+                array(
+                    'entry_type' => CommentTypeReopenmbeddedForm::class,
+                    'entry_options' => ['label' => false],
+//                    'label' => 'Support Entries',
+//                    'error_bubbling' => true,
+                    'allow_add' => true,
+                    'by_reference' => false,
+//                    'cascade_validation' => true,
+                ));
     }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Comment::class,
+            'data_class' => Ticket::class,
         ]);
     }
+
+
 }
