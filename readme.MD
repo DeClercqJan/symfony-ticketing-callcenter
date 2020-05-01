@@ -154,8 +154,21 @@ X met cascade kan je removen en nog weel meer
 - use constants for stuff like  "open" status message wthat will be used in if-checks
 X passing variable to email twig template to send full url
     <a href="{{ url('ticket_show', {id : ticketid}) }}">View ticket</a>
+X able to reproduce symfonydocs example of adding new records in associated entity via the form of another related entity. Using javascript/jquery. Based on symfonydocs example, but had to fill in many blanks"
+    als ik ticket wil laten heropenen, is dat op niveau van ticket
+    maar ik wil daar dan een comment door de gebruiker bij. Dat is op het niveau van comment
+    hoe krijg ik mijn form zo dat het zowel ticket als commentdingen doet
+    https://symfony.com/doc/current/form/form_collections.html
+    proberen nabouwen
+    https://symfony.com/doc/current/form/form_collections.html
+    is met jquery. hoe gebruik je dan jquery?
+    https://symfony.com/doc/current/frontend/encore/simple-example.html
+    problemen met installeren: npm of yarn
+    https://www.jetbrains.com/help/phpstorm/installing-and-removing-external-software-using-node-package-manager.html#
+    dan jquery doen werken. Foutmeldingen checken
+    nog annotations toegevoegd zodat related tags ook worden persist naar database
 
-            
+      
 ## TO DO'S
 - once I've got my exteran
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
