@@ -1,6 +1,8 @@
 # TICKETING MOSHI MOSHI CALLCENTER 
 
 ## BASIC IDEA
+- customer make tickets for service requests. These these are then distruted over the helpdesk's employees and resolved. See requirements below
+- PHP Symfony
 
 ## IMPLEMENTATION (- points, * subelements, X lessons)
 
@@ -194,6 +196,7 @@ X met cascade kan je removen en nog weel meer
         private $tickets;  
 
 ## TO DO'S
+- move lessons learned to docs elswhere
 - basically, for learning purposes, this exercise is done. What's left are basically variations of the same thing and while practice does make perfect, I have other priorities
 
 - notable to do's
