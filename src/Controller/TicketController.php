@@ -35,16 +35,18 @@ class TicketController extends AbstractController
     /**
      * @Route("/new", name="ticket_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserInterface $user, Security $security): Response
+    public function new(Request $request, Security $security): Response
     {
         $ticket = new Ticket();
         if (!$this->isGranted('TICKET_CREATE', $ticket)) {
             throw $this->createAccessDeniedException('No access!');
         }
-
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $ticket->setPriorityLevel(0);
+            $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
+            $ticket->setAuthor($security->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
             $entityManager->flush();
@@ -87,6 +89,10 @@ class TicketController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            if ($ticket::EXTERNAL_STATUS_MESSAGE_CLOSED === $ticket->getExternalStatusMessage()) {
+            $ticket->setCanReopenUntil();
+            }
+
             return $this->redirectToRoute('ticket_index');
         }
 
@@ -122,6 +128,7 @@ class TicketController extends AbstractController
         if (!$this->isGranted('TICKET_REOPEN', $ticket)) {
             throw $this->createAccessDeniedException('No access!');
         }
+        // need to move this once in database
         $ticket->setCanReopenUntil();
         // dd($ticket->getCanReopenUntil());
         if ($ticket->getCanReopenUntil()) {
@@ -132,10 +139,9 @@ class TicketController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // dd($form);
+            dd($form);
             $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
             $entityManager = $this->getDoctrine()->getManager();
-            $ticket->setExternalStatusMessage('open');
             // persisting related comments happens by way of cascade="persist" annotation
             $entityManager->persist($ticket);
             $entityManager->flush();
