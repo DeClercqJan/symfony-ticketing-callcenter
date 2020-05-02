@@ -37,11 +37,11 @@ class Comment
     private $ticket;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="authoredComments")
+     * @ORM\JoinColumn(nullable=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
-    private $user;
+    private $author;
 
     public function getId(): ?int
     {
@@ -53,8 +53,9 @@ class Comment
         return $this->commentText;
     }
 
-    public function setCommentText(string $commentText): self
+    public function setCommentText(?string $commentText): self
     {
+//        dd($commentText);
         $this->commentText = $commentText;
 
         return $this;
@@ -84,14 +85,14 @@ class Comment
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getAuthor(): ?User
     {
-        return $this->user;
+        return $this->author;
     }
 
-    public function setUser(?User $user): self
+    public function setAuthor(?User $author): self
     {
-        $this->user = $user;
+        $this->author = $author;
 
         return $this;
     }

@@ -29,7 +29,6 @@ class UserType extends AbstractType
                 'by_reference' => false,
             ])
         ;
-        //roles field data transformer
         $builder->get('roles')
             ->addModelTransformer(new CallbackTransformer(
                 function ($rolesArray) {

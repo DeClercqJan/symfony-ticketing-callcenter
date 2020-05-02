@@ -44,14 +44,20 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $tickets;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author", cascade={"remove"})
      */
-    private $comments;
+    private $authoredComments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="author", cascade={"remove"})
+     */
+    private $authoredTickets;
 
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
-        $this->comments = new ArrayCollection();
+        $this->authoredComments = new ArrayCollection();
+        $this->authoredTickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,7 +93,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_CUSTOMER';
 
         return array_unique($roles);
     }
@@ -130,28 +136,59 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * @return Collection|Comment[]
      */
-    public function getComments(): Collection
+    public function getAuthoredComments(): Collection
     {
-        return $this->comments;
+        return $this->authoredComments;
     }
 
-    public function addComment(Comment $comment): self
+    public function addAuthoredComment(Comment $comment): self
     {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setUser($this);
+        if (!$this->authoredComments->contains($comment)) {
+            $this->authoredComments[] = $comment;
+            $comment->setAuthor($this);
         }
 
         return $this;
     }
 
-    public function removeComment(Comment $comment): self
+    public function removeAuthoredComment(Comment $comment): self
     {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
+        if ($this->authoredComments->contains($comment)) {
+            $this->authoredComments->removeElement($comment);
             // set the owning side to null (unless already changed)
-            if ($comment->getUser() === $this) {
-                $comment->setUser(null);
+            if ($comment->getAuthor() === $this) {
+                $comment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ticket[]
+     */
+    public function getAuthoredTickets(): Collection
+    {
+        return $this->authoredTickets;
+    }
+
+    public function addAuthoredTickets(Ticket $ticket): self
+    {
+        if (!$this->authoredTickets->contains($ticket)) {
+            $this->authoredTickets[] = $ticket;
+            $ticket->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthoredTickets(Ticket $ticket): self
+    {
+        if ($this->authoredTickets->contains($ticket)) {
+            $this->authoredTickets->removeElement($ticket);
+            // set the owning side to null (unless already changed)
+            if ($ticket->getAuthor() === $this) {
+                $ticket->setAuthor(null);
             }
         }
 
@@ -165,6 +202,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     public function getUsername()
     {
+        return $this->getEmail();
         // TODO: Implement getUsername() method.
     }
 

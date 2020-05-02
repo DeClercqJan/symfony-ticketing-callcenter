@@ -32,6 +32,10 @@
             <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
+            <th>Author</th>
+            <td>{{ ticket.author }}</td>
+        </tr>
+        <tr>
             <th>Users</th>
             {% for user in ticket.users %}
                 <td>comment id {{ user.id }} <br>
@@ -47,10 +51,12 @@
             {% for comment in ticket.comments %}
                 <td>comment id {{ comment.id }} <br>
                     commentText: {{ comment.commentText }} <br>
-                    user: {{ comment.user }} }} <br>
-                    roles user: {% for role in comment.user.roles %}
+                    author: {{ comment.author }} }} <br>
+                    roles author: {% for role in comment.author.roles %}
                         {{ role }}
                     {% endfor %}
+                    <a href="{{ path('comment_show', {'ticketid' : comment.ticket.id, 'commentid' : comment.id}) }}">to
+                        comment</a>
                 </td>
             {% endfor %}
         </tr>
@@ -58,9 +64,18 @@
         </tbody>
     </table>
 
-    <a href="{{ path('ticket_index') }}">back to list</a>
-
-    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+    <a href="{{ path('ticket_index') }}">to tickets</a>
+    <a href="{{ path('comment_index_per_ticket', {'ticketid' : ticket.id}) }}">to comments per ticket</a>
+    {% if is_granted('ROLE_TICKET_ASSIGN_SELF') %}
+        <a href="{{ path('ticket_assign_self', {'id': ticket.id}) }}">assign to self</a>
+    {% endif %}
+    {% if is_granted('ROLE_TICKET_EDIT') %}
+        <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+    {% endif %}
+    {% if ticket.externalStatusMessage is same as (constant('EXTERNAL_STATUS_MESSAGE_CLOSED', ticket)) and is_granted('ROLE_TICKET_REOPEN') %}
+        <a href="{{ path('ticket_reopen', {'id': ticket.id}) }}">reopen</a>
+    {% endif %}
+    <a href="{{ path('comment_new', {'ticketid' : ticket.id}) }}">Create new comment</a>
 
     {{ include('ticket/_delete_form.html.twig') }}
 {% endblock %}

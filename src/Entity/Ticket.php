@@ -6,12 +6,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TicketRepository")
  */
 class Ticket
 {
+    const EXTERNAL_STATUS_MESSAGE_OPEN = 'open';
+    const EXTERNAL_STATUS_MESSAGE_PROGRESS_ = 'in progress';
+    const EXTERNAL_STATUS_MESSAGE_WAITING = 'waiting for customer feedback';
+    const EXTERNAL_STATUS_MESSAGE_CLOSED = 'closed';
+    const EXTERNAL_STATUS_MESSAGE_WONT = 'won\'t fix';
+
     use TimestampableEntity;
 
     /**
@@ -37,23 +44,47 @@ class Ticket
     private $ticketText;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="ticket", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="ticket", cascade={"remove", "persist"})
      */
     private $comments;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets")
      * @ORM\JoinTable(name="ticket_user",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      * )
      */
     private $users;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="authoredTickets")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $author;
+
+    /**
+     * @ORM\Column(type="datetime",  nullable=true)
+     */
+    private $canReopenUntil;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->users = new ArrayCollection();
+    }
+
+    public function setCanReopenUntil(): self
+    {
+        //$this->canReopenUntil = new \DateTime('-1 hour');
+        $this->canReopenUntil = new \DateTime('+1 hour');
+        return $this;
+    }
+
+    public function getCanReopenUntil(): bool
+
+    {
+        return $this->canReopenUntil <= new \DateTime();
     }
 
     public function getId(): ?int
@@ -107,6 +138,7 @@ class Ticket
 
     public function addComment(Comment $comment): self
     {
+        // dump($comment);
         if (!$this->comments->contains($comment)) {
             $this->comments[] = $comment;
             $comment->setTicket($this);
@@ -161,4 +193,36 @@ class Ticket
         return $this->getTicketText();
         // TODO: Implement eraseCredentials() method.
     }
+
+    public function setAuthor($author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+//    public function addAuthor(User $user): self
+//    {
+//        if (!$this->author->contains($user)) {
+//            $this->author[] = $user;
+//            $user->addAuthoredTickets($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeAuthor(User $user): self
+//    {
+//        if ($this->users->contains($user)) {
+//            $this->users->removeElement($user);
+//            $user->removeAuthoredTickets($this);
+//        }
+//
+//        return $this;
+//    }
 }

@@ -7,7 +7,9 @@
 
     {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('comment_index') }}">back to list</a>
+    <a href="{{ path('comment_index_all') }}">to all comments(only for admin?) </a>
+    <a href="{{ path('comment_index_per_ticket', {'ticketid' : comment.ticket.id}) }}">back to comments per ticket</a>
+    <a href="{{ path('ticket_show', {'id' : comment.ticket.id}) }}">back to ticket</a>
 
     {{ include('comment/_delete_form.html.twig') }}
 {% endblock %}

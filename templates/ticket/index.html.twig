@@ -4,9 +4,51 @@
 
 {% block body %}
     <h1>Ticket index</h1>
-
+    {% if is_granted('ROLE_TICKET_ADMIN') %}
+        <h2>Authored tickets</h2>
+    {% endif %}
     <table class="table">
         <thead>
+        <tr>
+            <th>Id</th>
+            <th>PriorityLevel</th>
+            <th>ExternalStatusMessage</th>
+            <th>TicketText</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ticket in tickets %}
+            {% if app.user == ticket.author %}
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.priorityLevel }}</td>
+                    <td>{{ ticket.externalStatusMessage }}</td>
+                    <td>{{ ticket.ticketText }}</td>
+                    <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
+                        <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if app.user.authoredTickets is empty %}
+        <p>no records with your name on were found</p>
+    {% endif %}
+    {% if is_granted('ROLE_TICKET_ADMIN') %}
+        <h2>Assigned tickets</h2>
+        <table class="table">
+            <thead>
             <tr>
                 <th>Id</th>
                 <th>PriorityLevel</th>
@@ -16,28 +58,121 @@
                 <th>UpdatedAt</th>
                 <th>actions</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
+            {% for ticket in tickets %}
+                {% if app.user in ticket.users %}
+                    <tr>
+                        <td>{{ ticket.id }}</td>
+                        <td>{{ ticket.priorityLevel }}</td>
+                        <td>{{ ticket.externalStatusMessage }}</td>
+                        <td>{{ ticket.ticketText }}</td>
+                        <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
+                            <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if app.user.tickets is empty %}
+            <p>no records were assigned to you</p>
+        {% endif %}
+    {% endif %}
+    {% if is_granted('ROLE_AGENT_LINE_1') %}
+        <h2>Tickets that have NOT been assigned a user</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>PriorityLevel</th>
+                <th>ExternalStatusMessage</th>
+                <th>TicketText</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in tickets %}
+                {% if ticket.users is empty %}
+                    <tr>
+                        <td>{{ ticket.id }}</td>
+                        <td>{{ ticket.priorityLevel }}</td>
+                        <td>{{ ticket.externalStatusMessage }}</td>
+                        <td>{{ ticket.ticketText }}</td>
+                        <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
+                            <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% set foo = '' %}
         {% for ticket in tickets %}
-            <tr>
-                <td>{{ ticket.id }}</td>
-                <td>{{ ticket.priorityLevel }}</td>
-                <td>{{ ticket.externalStatusMessage }}</td>
-                <td>{{ ticket.ticketText }}</td>
-                <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
-                    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
+            {% if ticket.users is empty %}
+                {% set foo = 'yes' %}
+            {% endif %}
         {% endfor %}
-        </tbody>
-    </table>
-
+        {% if foo == 'yes' %}
+        {% else %}
+            <p>All tickets have been assigned</p>
+        {% endif %}
+    {% endif %}
+    {% if is_granted('ROLE_TICKET_ADMIN') %}
+        <h2>All tickets</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>PriorityLevel</th>
+                <th>ExternalStatusMessage</th>
+                <th>TicketText</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.priorityLevel }}</td>
+                    <td>{{ ticket.externalStatusMessage }}</td>
+                    <td>{{ ticket.ticketText }}</td>
+                    <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
+                        <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if tickets is empty %}
+            <p>there are no tickets</p>
+        {% endif %}
+    {% endif %}
     <a href="{{ path('ticket_new') }}">Create new</a>
+    <a href="{{ path('comment_index_all') }}">to all comments(only for admin?) </a>
 {% endblock %}
