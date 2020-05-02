@@ -170,6 +170,17 @@ X able to reproduce symfonydocs example of adding new records in associated enti
     er is ook een bib met allemaal dingetjes om het te vergemakkelijken
 - moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... toward handling and checking things in controller instead. As I was generating errors without being aware of doing so
 X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
+- didn't want to display row for every check that it's empty so used variable to be populated and then checked if it was ppulated or not:
+        {% set foo = '' %}
+        {% for ticket in tickets %}
+            {% if ticket.users is empty %}
+                {% set foo = 'yes' %}
+            {% endif %}
+        {% endfor %}
+        {% if foo == 'yes' %}
+        {% else %}
+            <p>All tickets have been assigned</p>
+        {% endif %}
 
 ## TO DO'S
 - /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.

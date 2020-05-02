@@ -125,14 +125,13 @@
         </table>
         {% set foo = '' %}
         {% for ticket in tickets %}
-            {% if not ticket.users is empty %}
+            {% if ticket.users is empty %}
                 {% set foo = 'yes' %}
             {% endif %}
         {% endfor %}
         {% if foo == 'yes' %}
-            <p>test123</p>
         {% else %}
-            <p>All tickets were assigned to a user</p>
+            <p>All tickets have been assigned</p>
         {% endif %}
     {% endif %}
     {% if is_granted('ROLE_TICKET_ADMIN') %}
