@@ -60,11 +60,11 @@ class CommentController extends AbstractController
 
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
+        $user = $security->getUser();
+        $comment->setAuthor($user);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $user = $security->getUser();
-            $comment->setAuthor($user);
 
             $ticketAuthor = $ticket->getAuthor();
             $ticketid = $ticket->getId();

@@ -7,6 +7,7 @@ use App\Entity\Task;
 use App\Entity\Ticket;
 use App\Form\TaskType;
 use App\Form\TicketType;
+use App\Form\TicketTypeReopen;
 use App\Repository\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -89,7 +90,7 @@ class TicketController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             if ($ticket::EXTERNAL_STATUS_MESSAGE_CLOSED === $ticket->getExternalStatusMessage()) {
-            $ticket->setCanReopenUntil();
+                $ticket->setCanReopenUntil();
             }
 
             return $this->redirectToRoute('ticket_index');
@@ -134,18 +135,14 @@ class TicketController extends AbstractController
             throw $this->createAccessDeniedException('You can only reopen a ticket up until an hour after it has been been closed !');
         }
 
-        $form = $this->createForm(TicketType::class, $ticket);
+        $form = $this->createForm(TicketTypeReopen::class, $ticket);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             dd($form);
             $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
             $entityManager = $this->getDoctrine()->getManager();
-<<<<<<< HEAD
             // persisting related comments happens by way of cascade="persist" annotation
-=======
-            $ticket->setExternalStatusMessage('open');
->>>>>>> parent of f8cc6b3... you can add a comment on reopening ticket. But form looks like a mess. This, however, is intentional, as not rendering fields may results in dramatic errors in database
             $entityManager->persist($ticket);
             $entityManager->flush();
             return $this->redirectToRoute('ticket_index');

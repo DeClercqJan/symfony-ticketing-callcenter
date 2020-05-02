@@ -41,13 +41,12 @@ class TicketTypeReopen extends AbstractType
                 'comments',
                 CollectionType::class,
                 array(
-                    'entry_type' => CommentTypeReopenmbeddedForm::class,
+                    'entry_type' => CommentTypeEmbeddedForm::class,
                     'entry_options' => ['label' => false],
 //                    'label' => 'Support Entries',
-                    'error_bubbling' => true,
+//                    'error_bubbling' => true,
                     'allow_add' => true,
-                    'by_reference' => true,
-                    'prototype' => true,
+                    'by_reference' => false,
 //                    'cascade_validation' => true,
                 ));
     }

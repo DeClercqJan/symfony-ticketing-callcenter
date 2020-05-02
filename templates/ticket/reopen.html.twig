@@ -27,12 +27,8 @@
     {% endif %}
     {{ form_widget(form._token) }}
     <button class="btn">{{ button_label|default('Reopen') }}</button>
-<<<<<<< HEAD
-{#        {{ form_end(form, {'render_rest': false}) }}#}
+    {#    {{ form_end(form, {'render_rest': false}) }}#}
     {{ form_end(form) }}
-=======
-    {{ form_end(form, {'render_rest': false}) }}
->>>>>>> parent of f8cc6b3... you can add a comment on reopening ticket. But form looks like a mess. This, however, is intentional, as not rendering fields may results in dramatic errors in database
 
     <a href="{{ path('ticket_index') }}">to tickets</a>
     <a href="{{ path('ticket_show', {'id' : ticket.id}) }}">back to ticket</a>

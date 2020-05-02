@@ -167,8 +167,6 @@ X able to reproduce symfonydocs example of adding new records in associated enti
     https://www.jetbrains.com/help/phpstorm/installing-and-removing-external-software-using-node-package-manager.html#
     dan jquery doen werken. Foutmeldingen checken
     nog annotations toegevoegd zodat related tags ook worden persist naar database
-<<<<<<< HEAD
-    {% if ticket.externalStatusMessage is same as (constant('EXTERNAL_STATUS_MESSAGE_CLOSED', ticket))
 - moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... toward handling and checking things in controller instead. As I was generating errors without being aware of doing so
 X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
 
@@ -180,12 +178,7 @@ X complex interplay of twig, annotations/databas and controller/forms ... now re
 - /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.
     ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. Also, jquery rendering is another thing
 -> learn more over Forms! 
-- reopen doesnt persist comment
-=======
-
-      
-## TO DO'S
->>>>>>> parent of f8cc6b3... you can add a comment on reopening ticket. But form looks like a mess. This, however, is intentional, as not rendering fields may results in dramatic errors in database
+- reopen doesnt persist comment 
 - remove code pertaining to tasks and tasks, don't forget jquery
 - once I've got my exteran
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick

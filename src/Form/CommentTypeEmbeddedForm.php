@@ -35,20 +35,15 @@ class CommentTypeEmbeddedForm extends AbstractType
         $builder
             ->add('commentText', TextType::class)
             ->add('isCommentPublic')
-<<<<<<< HEAD:src/Form/CommentTypeReopenmbeddedForm.php
-            ->add('author', EmailType::class,
-                [
-=======
-//            ->add('createdAt')
-//            ->add('updatedAt')
             ->add('author', EmailType::class, [
->>>>>>> parent of f8cc6b3... you can add a comment on reopening ticket. But form looks like a mess. This, however, is intentional, as not rendering fields may results in dramatic errors in database:src/Form/CommentTypeEmbeddedForm.php
+                'empty_data' => $this->security->getUser()->getUsername(),
                 'empty_data' => $this->security->getUser()->getUsername(),
             ]);
         $builder
             ->get('author')
             ->addModelTransformer($this->modelTransformer);
     }
+
 
     public function configureOptions(OptionsResolver $resolver)
     {
