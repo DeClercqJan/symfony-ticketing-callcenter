@@ -1,11 +1,11 @@
 {{ form_start(form) }}
 {% if is_granted('ROLE_COMMENT_CREATE') %}
     {{ form_row(form.commentText) }}
-{% endif %}
-{% if is_granted('ROLE_COMMENT_EDIT') %}
     {{ form_row(form.isCommentPublic) }}
-        {{ form_row(form.author) }}
 {% endif %}
+{#{% if is_granted('ROLE_COMMENT_EDIT') %}#}
+{#        {{ form_row(form.author) }}#}
+{#{% endif %}#}
 {{ form_widget(form._token) }}
 <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form, {'render_rest': false}) }}

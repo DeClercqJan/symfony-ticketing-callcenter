@@ -44,9 +44,10 @@ class TicketTypeReopen extends AbstractType
                     'entry_type' => CommentTypeReopenmbeddedForm::class,
                     'entry_options' => ['label' => false],
 //                    'label' => 'Support Entries',
-//                    'error_bubbling' => true,
+                    'error_bubbling' => true,
                     'allow_add' => true,
-                    'by_reference' => false,
+                    'by_reference' => true,
+                    'prototype' => true,
 //                    'cascade_validation' => true,
                 ));
     }

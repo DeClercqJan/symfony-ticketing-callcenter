@@ -37,63 +37,14 @@ class TicketType extends AbstractType
     {
         // default values added
         $builder
-            ->add('priorityLevel', IntegerType::class, [
-                'empty_data' => '0',
-            ])
-            ->add('externalStatusMessage', TextType::class, [
-                'empty_data' => 'open',
-            ])
             ->add('ticketText', TextType::class
             )
-//            ->add('createdAt')
-//            ->add('updatedAt')
             ->add('users', EntityType::class, [
                 'class' => User::class,
                 'multiple' => true,
                 'by_reference' => false,
-            ])
-            ->add('author', EmailType::class, [
-                'empty_data' => $this->security->getUser()->getUsername(),
-            ])
-//            ->add('comments', EntityType::class, [
-//                'class' => Comment::class,
-//                'multiple' => true,
-//                'by_reference' => false,
-//            ])
-            ->add(
-                'comments',
-                CollectionType::class,
-                array(
-                    'entry_type' => CommentTypeReopenmbeddedForm::class,
-                    'entry_options' => ['label' => false],
-//                    'label' => 'Support Entries',
-//                    'error_bubbling' => true,
-                    'allow_add' => true,
-                    'by_reference' => false,
-//                    'cascade_validation' => true,
-                )
-            );
-
-        $builder
-            ->get('author')
-            ->addModelTransformer($this->modelTransformer);
-
-        // good idea, but onyl for when you leave a field blank. Does not work if field is not rendered
-//        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-//
-//            /** @var array $requestData */
-//            $requestData = $event->getData();
-//            dd($requestData);
-//            /** @var Ticket $ticket */
-//            $ticket = $event->getForm()->getData();
-//
-//            if ($ticket && !$requestData['commentText']) {
-//                $requestData['ticketText'] = $ticket->getTicketText();
-//            }
-//
-//            $event->setData($requestData);
-//        });
-    }
+            ]);
+}
 
     public function configureOptions(OptionsResolver $resolver)
     {

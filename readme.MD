@@ -169,14 +169,18 @@ X able to reproduce symfonydocs example of adding new records in associated enti
     dan jquery doen werken. Foutmeldingen checken
     nog annotations toegevoegd zodat related tags ook worden persist naar database
     {% if ticket.externalStatusMessage is same as (constant('EXTERNAL_STATUS_MESSAGE_CLOSED', ticket))
-      
+- moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... toward handling and checking things in controller instead. As I was generating errors without being aware of doing so
+X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
+
 ## TO DO'S
 - DIT NOG ERGENS ZETTEN IN CONTROLLER NA CLOSEN VAN TICKET (heropenen al gedaan)
           $ticket->setCanReopenUntil();
           // dd($ticket->());
+- also needs to persist these dates to database
 - /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.
     ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. Also, jquery rendering is another thing
 -> learn more over Forms! 
+- reopen doesnt persist comment
 - remove code pertaining to tasks and tasks, don't forget jquery
 - once I've got my exteran
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
