@@ -135,7 +135,7 @@ class Ticket
 
     public function addComment(Comment $comment): self
     {
-        dump($comment);
+        // dump($comment);
         if (!$this->comments->contains($comment)) {
             $this->comments[] = $comment;
             $comment->setTicket($this);

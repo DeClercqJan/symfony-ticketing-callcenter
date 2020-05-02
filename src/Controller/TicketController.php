@@ -139,7 +139,7 @@ class TicketController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($form);
+            // dd($form);
             $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
             $entityManager = $this->getDoctrine()->getManager();
             // persisting related comments happens by way of cascade="persist" annotation
