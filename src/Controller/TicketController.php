@@ -47,6 +47,7 @@ class TicketController extends AbstractController
             $ticket->setPriorityLevel(0);
             $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
             $ticket->setAuthor($security->getUser());
+            $ticket->setCanReopenUntil();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
             $entityManager->flush();
@@ -128,9 +129,7 @@ class TicketController extends AbstractController
         if (!$this->isGranted('TICKET_REOPEN', $ticket)) {
             throw $this->createAccessDeniedException('No access!');
         }
-        // need to move this once in database
-        $ticket->setCanReopenUntil();
-        // dd($ticket->getCanReopenUntil());
+
         if ($ticket->getCanReopenUntil()) {
             throw $this->createAccessDeniedException('You can only reopen a ticket up until an hour after it has been been closed !');
         }

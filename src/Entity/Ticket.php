@@ -63,6 +63,9 @@ class Ticket
      */
     private $author;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
     private $canReopenUntil;
 
     public function __construct()

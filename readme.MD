@@ -167,6 +167,7 @@ X able to reproduce symfonydocs example of adding new records in associated enti
     https://www.jetbrains.com/help/phpstorm/installing-and-removing-external-software-using-node-package-manager.html#
     dan jquery doen werken. Foutmeldingen checken
     nog annotations toegevoegd zodat related tags ook worden persist naar database
+    er is ook een bib met allemaal dingetjes om het te vergemakkelijken
 - moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... toward handling and checking things in controller instead. As I was generating errors without being aware of doing so
 X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
 
