@@ -24,6 +24,14 @@ class CommentController extends AbstractController
     use TargetPathTrait;
 
     /**
+     * @Route("ticket/comment", name="comment_redirect_common_error", methods={"GET"})
+     */
+    public function redirectCommonError()
+    {
+        return $this->redirectToRoute('comment_index_all');
+    }
+
+    /**
      * @Route("ticket/all/comment", name="comment_index_all", methods={"GET"})
      */
     public function indexCommentsAllTickets(CommentRepository $commentRepository): Response
