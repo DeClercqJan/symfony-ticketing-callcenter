@@ -12,14 +12,12 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
-class CommentTypeReopenmbeddedForm extends AbstractType
+class CommentTypeEmbeddedForm extends AbstractType
 {
     private $security;
 
@@ -28,7 +26,6 @@ class CommentTypeReopenmbeddedForm extends AbstractType
     public function __construct(Security $security, EmailToUserTransformer $EmailToUserTransformer)
     {
         $this->security = $security;
-
         $this->modelTransformer = $EmailToUserTransformer;
     }
 
@@ -38,8 +35,14 @@ class CommentTypeReopenmbeddedForm extends AbstractType
         $builder
             ->add('commentText', TextType::class)
             ->add('isCommentPublic')
+<<<<<<< HEAD:src/Form/CommentTypeReopenmbeddedForm.php
             ->add('author', EmailType::class,
                 [
+=======
+//            ->add('createdAt')
+//            ->add('updatedAt')
+            ->add('author', EmailType::class, [
+>>>>>>> parent of f8cc6b3... you can add a comment on reopening ticket. But form looks like a mess. This, however, is intentional, as not rendering fields may results in dramatic errors in database:src/Form/CommentTypeEmbeddedForm.php
                 'empty_data' => $this->security->getUser()->getUsername(),
             ]);
         $builder

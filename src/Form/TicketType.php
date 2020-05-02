@@ -14,10 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
@@ -37,14 +34,56 @@ class TicketType extends AbstractType
     {
         // default values added
         $builder
+<<<<<<< HEAD
             ->add('ticketText', TextType::class
+=======
+            ->add('priorityLevel', IntegerType::class, [
+                'empty_data' => '0',
+            ])
+            ->add('externalStatusMessage', TextType::class, [
+                'empty_data' => 'open',
+            ])
+            ->add('ticketText', TextType::class, [
+                    'empty_data' => 'testemptydatadefault',
+                ]
+>>>>>>> parent of f8cc6b3... you can add a comment on reopening ticket. But form looks like a mess. This, however, is intentional, as not rendering fields may results in dramatic errors in database
             )
             ->add('users', EntityType::class, [
                 'class' => User::class,
                 'multiple' => true,
                 'by_reference' => false,
+<<<<<<< HEAD
             ]);
 }
+=======
+            ])
+            ->add('author', EmailType::class, [
+                'empty_data' => $this->security->getUser()->getUsername(),
+            ])
+//            ->add('comments', EntityType::class, [
+//                'class' => Comment::class,
+//                'multiple' => true,
+//                'by_reference' => false,
+//            ])
+            ->add(
+                'comments',
+                CollectionType::class,
+                array(
+                    'entry_type' => CommentTypeEmbeddedForm::class,
+                    'entry_options' => ['label' => false],
+//                    'label' => 'Support Entries',
+//                    'error_bubbling' => true,
+                    'allow_add' => true,
+                    'by_reference' => false,
+//                    'cascade_validation' => true,
+                )
+            );
+
+        $builder
+            ->get('author')
+            ->addModelTransformer($this->modelTransformer);
+    }
+>>>>>>> parent of f8cc6b3... you can add a comment on reopening ticket. But form looks like a mess. This, however, is intentional, as not rendering fields may results in dramatic errors in database
 
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -52,6 +91,4 @@ class TicketType extends AbstractType
             'data_class' => Ticket::class,
         ]);
     }
-
-
 }
