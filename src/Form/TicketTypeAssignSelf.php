@@ -23,16 +23,10 @@ use Symfony\Component\Security\Core\Security;
 
 class TicketTypeAssignSelf extends AbstractType
 {
-    private $security;
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // default values added
+        // default values added in controller
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -136,18 +136,11 @@ class CommentController extends AbstractController
             throw $this->createAccessDeniedException('No access!');
         }
 
-//        $uri = $request->headers->get('referer');
-//        dd($uri);
-//        $test = $this->saveTargetPath($request->getSession(), 'main', $uri);
-//        dd($targetPath);
-        // $previous_page = $request->headers->get('referer');
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-//            $targetPath = $this->getTargetPath($request->getSession(), 'main');
-//            dd($targetPath);
-//dd($form);
+
             return $this->redirectToRoute('ticket_show', array('id' => $comment->getTicket()->getId()));
         }
 

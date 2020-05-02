@@ -37,7 +37,6 @@ class CommentTypeEmbeddedForm extends AbstractType
             ->add('isCommentPublic')
             ->add('author', EmailType::class, [
                 'empty_data' => $this->security->getUser()->getUsername(),
-                'empty_data' => $this->security->getUser()->getUsername(),
             ]);
         $builder
             ->get('author')

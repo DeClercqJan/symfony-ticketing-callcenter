@@ -49,7 +49,8 @@ X able to reproduce symfonydocs example of adding new records in associated enti
     dan jquery doen werken. Foutmeldingen checken
     nog annotations toegevoegd zodat related tags ook worden persist naar database
     er is ook een bib met allemaal dingetjes om het te vergemakkelijken
-- moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... toward handling and checking things in controller instead. As I was generating errors (overwriting everything related) without being aware of doing so
+- moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... 
+- toward handling and checking things in controller instead + creating specific forms to handle specific things. As I was generating errors (overwriting everything related) without being aware of doing so
 X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
 - fixtures for dummy data
 - user roles correspond to a series of authorizations. See security.yaml. Custom voter per object checks access. Could have done this directly, but now there's a centralized place at least so that the check if user is author is also visible at an eye's glance. Also displaying some things and not others in TWIG
@@ -103,6 +104,7 @@ X complex interplay of twig, annotations/databas and controller/forms ... now re
 - for business logic: it is now possible to create a ticket without assigngin a user. These are displaybed in admin ticket index to be displayed in some admin section in order to be reassigned
 
 ### TWIG
+- as always, paid very little attention to style. Was an ends to a mean and it's the most messy and can't be bothered to clean up/streamline
 X passing variable to email twig template to send full url
     <a href="{{ url('ticket_show', {id : ticketid}) }}">View ticket</a>
 - some form fields only visible dependening on ROLE. Some not rendered at all. Default values and such in the ...Type Form classes
@@ -192,13 +194,8 @@ X met cascade kan je removen en nog weel meer
         private $tickets;  
 
 ## TO DO'S
-### IMPORTANT
-- dev  branch in master branch mergen0
-- clean this up and move lessons learned to notes
-- remove code pertaining to tasks and tasks, don't forget jquery
-
-### LESS IMPORTANT
 - basically, for learning purposes, this exercise is done. What's left are basically variations of the same thing and while practice does make perfect, I have other priorities
+
 - notable to do's
 * dashboard: numbers, order according to priorities
 * public/private display

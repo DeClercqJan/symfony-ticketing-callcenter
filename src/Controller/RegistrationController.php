@@ -60,7 +60,7 @@ class RegistrationController extends AbstractController
                 $authenticator,
                 'main' // firewall name in security.yaml
             )
-                ?: new RedirectResponse('/'); // fallback
+                ?: new RedirectResponse('/login'); // fallback
             //;
         }
 

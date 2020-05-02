@@ -76,7 +76,6 @@ class Ticket
 
     public function setCanReopenUntil(): self
     {
-        //$this->canReopenUntil = new \DateTime('-1 hour');
         $this->canReopenUntil = new \DateTime('+1 hour');
         return $this;
     }
@@ -205,24 +204,4 @@ class Ticket
     {
         return $this->author;
     }
-
-//    public function addAuthor(User $user): self
-//    {
-//        if (!$this->author->contains($user)) {
-//            $this->author[] = $user;
-//            $user->addAuthoredTickets($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeAuthor(User $user): self
-//    {
-//        if ($this->users->contains($user)) {
-//            $this->users->removeElement($user);
-//            $user->removeAuthoredTickets($this);
-//        }
-//
-//        return $this;
-//    }
 }

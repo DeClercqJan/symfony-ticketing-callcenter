@@ -172,12 +172,10 @@ class TicketController extends AbstractController
 
             $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_PROGRESS_);
             $ticket->addUser($this->getUser());
-//            if ($ticket::EXTERNAL_STATUS_MESSAGE_CLOSED === $ticket->getExternalStatusMessage()) {
-//                $ticket->setCanReopenUntil();
-//            }
-//
+
+
             $this->getDoctrine()->getManager()->flush();
-//
+
             return $this->redirectToRoute('ticket_index');
         }
 
