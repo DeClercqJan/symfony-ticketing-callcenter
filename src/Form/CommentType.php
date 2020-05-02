@@ -19,13 +19,30 @@ use Symfony\Component\Security\Core\Security;
 
 class CommentType extends AbstractType
 {
+    private $security;
+
+    private $modelTransformer;
+
+    public function __construct(Security $security, EmailToUserTransformer $EmailToUserTransformer)
+    {
+        $this->security = $security;
+        $this->modelTransformer = $EmailToUserTransformer;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // default values added
         $builder
             ->add('commentText', TextType::class)
-            ->add('isCommentPublic');
+            ->add('isCommentPublic')
+//            ->add('createdAt')
+//            ->add('updatedAt')
+            ->add('author', EmailType::class, [
+                'empty_data' => $this->security->getUser()->getUsername(),
+            ]);
+        $builder
+            ->get('author')
+            ->addModelTransformer($this->modelTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)

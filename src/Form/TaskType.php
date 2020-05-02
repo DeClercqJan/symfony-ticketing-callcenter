@@ -21,7 +21,6 @@ class TaskType extends AbstractType
             'entry_type' => TagType::class,
             'entry_options' => ['label' => false],
             'allow_add' => true,
-            'by_reference' => false,
         ]);
     }
 

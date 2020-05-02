@@ -63,10 +63,9 @@ class CommentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $user = $security->getUser();
-            $comment->setAuthor($user);
 
             $ticketAuthor = $ticket->getAuthor();
+            $user = $security->getUser();
             $ticketid = $ticket->getId();
             if ($ticketAuthor === $user && $ticket::EXTERNAL_STATUS_MESSAGE_WAITING === $ticket->getExternalStatusMessage()) {
                 $agent = $ticket->getUsers();

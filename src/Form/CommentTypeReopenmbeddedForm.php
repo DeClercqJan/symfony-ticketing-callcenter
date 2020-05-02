@@ -38,14 +38,14 @@ class CommentTypeReopenmbeddedForm extends AbstractType
         $builder
             ->add('commentText', TextType::class)
             ->add('isCommentPublic')
-            ->add('author', EmailType::class,
-                [
+            ->add('author', EmailType::class, [
                 'empty_data' => $this->security->getUser()->getUsername(),
             ]);
         $builder
             ->get('author')
             ->addModelTransformer($this->modelTransformer);
     }
+
 
     public function configureOptions(OptionsResolver $resolver)
     {

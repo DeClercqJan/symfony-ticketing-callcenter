@@ -4,8 +4,8 @@
     {{ form_row(form.ticketText) }}
 {% endif %}
 {% if is_granted('ROLE_TICKET_EDIT') %}
-{#    {{ form_row(form.priorityLevel) }}#}
-{#    {{ form_row(form.externalStatusMessage) }}#}
+    {{ form_row(form.priorityLevel) }}
+    {{ form_row(form.externalStatusMessage) }}
     {{ form_row(form.users) }}
 {#    {{ form_row(form.author) }}#}
 {% endif %}

@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TicketRepository")
@@ -113,7 +112,7 @@ class Ticket
         return $this;
     }
 
-    public function getTicketText(): ?string
+    public function getTicketText(): string
     {
         return $this->ticketText;
     }
@@ -135,7 +134,6 @@ class Ticket
 
     public function addComment(Comment $comment): self
     {
-        ($comment);
         if (!$this->comments->contains($comment)) {
             $this->comments[] = $comment;
             $comment->setTicket($this);
