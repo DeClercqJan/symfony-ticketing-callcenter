@@ -47,7 +47,6 @@ class TicketController extends AbstractController
             $ticket->setPriorityLevel(0);
             $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_OPEN);
             $ticket->setAuthor($security->getUser());
-            $ticket->setCanReopenUntil();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
             $entityManager->flush();

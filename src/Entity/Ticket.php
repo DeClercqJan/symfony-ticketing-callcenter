@@ -64,7 +64,7 @@ class Ticket
     private $author;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime",  nullable=true)
      */
     private $canReopenUntil;
 
