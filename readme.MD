@@ -172,16 +172,10 @@ X able to reproduce symfonydocs example of adding new records in associated enti
 X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
 
 ## TO DO'S
-- DIT NOG ERGENS ZETTEN IN CONTROLLER NA CLOSEN VAN TICKET (heropenen al gedaan)
-          $ticket->setCanReopenUntil();
-          // dd($ticket->());
-- also needs to persist these dates to database
 - /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.
     ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. Also, jquery rendering is another thing
 -> learn more over Forms! 
-- reopen doesnt persist comment 
 - remove code pertaining to tasks and tasks, don't forget jquery
-- once I've got my exteran
 - need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
 - clean this up and move lessons learned to notes
 - dev  branch in master branch mergen0
