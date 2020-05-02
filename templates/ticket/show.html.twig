@@ -66,6 +66,9 @@
 
     <a href="{{ path('ticket_index') }}">to tickets</a>
     <a href="{{ path('comment_index_per_ticket', {'ticketid' : ticket.id}) }}">to comments per ticket</a>
+    {% if is_granted('ROLE_TICKET_ASSIGN_SELF') %}
+        <a href="{{ path('ticket_assign_self', {'id': ticket.id}) }}">assign to self</a>
+    {% endif %}
     {% if is_granted('ROLE_TICKET_EDIT') %}
         <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
     {% endif %}

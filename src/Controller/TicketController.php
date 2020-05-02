@@ -7,11 +7,14 @@ use App\Entity\Task;
 use App\Entity\Ticket;
 use App\Form\TaskType;
 use App\Form\TicketType;
+use App\Form\TicketTypeAssignSelf;
 use App\Form\TicketTypeReopen;
 use App\Repository\TicketRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -87,11 +90,12 @@ class TicketController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
             if ($ticket::EXTERNAL_STATUS_MESSAGE_CLOSED === $ticket->getExternalStatusMessage()) {
                 $ticket->setCanReopenUntil();
             }
+
+            $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('ticket_index');
         }
@@ -111,7 +115,7 @@ class TicketController extends AbstractController
             throw $this->createAccessDeniedException('No access!');
         }
 
-        if ($this->isCsrfTokenValid('delete'.$ticket->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $ticket->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($ticket);
             $entityManager->flush();
@@ -147,6 +151,37 @@ class TicketController extends AbstractController
         }
 
         return $this->render('ticket/reopen.html.twig', [
+            'ticket' => $ticket,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/assign_self", name="ticket_assign_self", methods={"GET","POST"})
+     */
+    public function assignSelf(Request $request, Ticket $ticket): Response
+    {
+        if (!$this->isGranted('TICKET_ASSIGN_SELF', $ticket)) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+
+        $form = $this->createForm(TicketTypeAssignSelf::class, $ticket);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $ticket->setExternalStatusMessage($ticket::EXTERNAL_STATUS_MESSAGE_PROGRESS_);
+            $ticket->addUser($this->getUser());
+//            if ($ticket::EXTERNAL_STATUS_MESSAGE_CLOSED === $ticket->getExternalStatusMessage()) {
+//                $ticket->setCanReopenUntil();
+//            }
+//
+            $this->getDoctrine()->getManager()->flush();
+//
+            return $this->redirectToRoute('ticket_index');
+        }
+
+        return $this->render('ticket/assign_self.html.twig', [
             'ticket' => $ticket,
             'form' => $form->createView(),
         ]);

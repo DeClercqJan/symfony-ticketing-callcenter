@@ -41,6 +41,17 @@ class UserFixture extends BaseFixture
             return $user;
         });
         $manager->flush();
+        $this->createMany(5, 'usersAgentLine1', function ($count) use ($manager) {
+            $user = new User();
+            $user->setEmail(sprintf('agentLine1_%d@example.com', $count));
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                'engage'
+            ));
+            $user->setRoles(['ROLE_AGENT_LINE_1']);
+            return $user;
+        });
+        $manager->flush();
     }
 
     public function getDependencies()

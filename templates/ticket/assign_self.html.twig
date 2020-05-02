@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Assign Ticket To Self{% endblock %}
+
+{% block body %}
+    <h1>Assign Ticket </h1>
+
+    {{ form_start(form) }}
+    {#    {{ form_widget(form) }}#}
+    {{ form_widget(form._token) }}
+    <button class="btn">{{ button_label|default('Assign to self') }}</button>
+    {#    {{ form_end(form, {'render_rest': false}) }}#}
+    {{ form_end(form) }}
+
+    <a href="{{ path('ticket_index') }}">to tickets</a>
+    <a href="{{ path('ticket_show', {'id' : ticket.id}) }}">back to ticket</a>
+{% endblock %}

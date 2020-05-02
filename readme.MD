@@ -184,6 +184,7 @@ X complex interplay of twig, annotations/databas and controller/forms ... now re
 - for business logic: it is now possible to create a ticket without assigngin a user. These are displaybed in admin ticket index to be displayed in some admin section in order to be reassigned
 
 ## TO DO'S
+- only display private comments
 - /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.
     ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. Also, jquery rendering is another thing
 -> learn more over Forms! 
