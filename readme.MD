@@ -3,19 +3,18 @@
 ## BASIC IDEA
 
 ## IMPLEMENTATION (- points, * subelements, X lessons)
+
+### SETUP
 - took time out to schematize: read the assigment and tried to separate the entities and their properties on the one hand and, on the other, listed the actions users can take as I'm planning to assign them to several users (and reuse them whilst doing so) 
-- scheming was far from easy and probably will need to change stuff, which will get messy. May even prove to have been the wrong approach
+X for futere reference, need even more paper with all sorts of lines drawn
 - for basic set-up, I have 3 entitites. Users and tickets in ManyToMany relation (as a Customer-user can have many tickets and a ticket can have both a Customer-user and a Agent-user) and comments: easy; 1 comments, 1 user/author, 1 ticket; 1 ticket can have many comments; 1 user can have many comments
-- (I was, orginally, gonna extend User class to Customer and Agent classes and NOT have a ManyToMany-relationship, but didn't (immediately) find how Doctrine would react so for now I'm relying on the roles-property
-- timestampable trait, which I'm expecting to need in order to calculate whether or not the comment made by a user in response to a request for feedback is the right one in order to continue the track
-- will start out with the 'perfect' lifecycle a ticket can follow. That excellent service we all expect and never experiences
-- will rely heavily on Symfonycasts code
-- gonna use basic article/id123/edit -like routing structure Appending commentcontroller to reflect this
-- privilging hierarchical ticket > comments, but also trying to provide overview of all comments while restricting/allowing actions in order to keep things logical
-- notable: can't create new comment from generic comment overviewpage
-? all/comments route maybe not only relevant for admin, but also for regular customers
--> drawing lines on a piece of paper would probably help
-- note to self: how to deal with multiple parameters in url
+? (I was, orginally, gonna extend User class to Customer and Agent classes and NOT have a ManyToMany-relationship, but didn't (immediately) find how Doctrine would react so for now I'm relying on the roles-property
+
+### ROUTING 
+- basic article/id123/edit -like routing structure Appending commentcontroller
+* privileging hierarchical ticket > comments, but also trying to provide overview of all comments while restricting/allowing actions in order to keep things logical
+* notable: can't create new comment from generic comment overviewpage
+X note to self: how to deal with multiple parameters in url
     /**
      * @Route("/ticket/{ticketid}/comment/{commentid}", name="comment_show", methods={"GET"})
      * @ParamConverter("ticket", options={"mapping": {"ticketid" : "id"}})
@@ -23,14 +22,115 @@
      */
     public function show(Ticket $ticket, Comment $comment): Response
     {
-- getRoles always returns ROLE_CUSTOMER. in security. yaml I may repeat myself in role hierarchy, but I think it's better for clarity as one (me) easily forgets that all registered users have the (related) roles of the customer
-- fixtures for dummy data
-- made functional login form using maker using make:auth and tinkering a bit in security.yaml and such. But can't see username of logged in user. Moving on) 
-- working mailer, using symfony/mailer bundle and mailtrap to debug. Now gonna configure symfonycasts' reset-password-bundle
+    
+### ACCESS 
+- made functional login form using maker using make:auth and tinkering a bit in security.yaml and such. 
 - registration form using make:registration-form
+- symfonycasts' reset-password-bundle
+- working mailer, using symfony/mailer bundle and mailtrap to debug.
 - welcome mail to all newly registered users (need to change, because this was meant for new agents - see assignment below)
-- added data transformer to form in order to add roles to new User. However, no real data yet"
 - created dev branch to try out make:crud in the hopes of facilitating set-up and have a good base to tinker with
+- remember function etc.
+
+### FORMS
+- added data transformer or data data provider to form in order to add roles to new User.
+(got lucky with a combination of https://symfonycasts.com/screencast/symfony-forms/custom-field-type#play (vanaf minuut 3 en daaropvolgende casts) + https://symfony.com/doc/current/form/data_transformers.html)
+X able to reproduce symfonydocs example of adding new records in associated entity via the form of another related entity. Using javascript/jquery. Based on symfonydocs example, but had to fill in many blanks"
+    als ik ticket wil laten heropenen, is dat op niveau van ticket
+    maar ik wil daar dan een comment door de gebruiker bij. Dat is op het niveau van comment
+    hoe krijg ik mijn form zo dat het zowel ticket als commentdingen doet
+    https://symfony.com/doc/current/form/form_collections.html
+    proberen nabouwen
+    https://symfony.com/doc/current/form/form_collections.html
+    is met jquery. hoe gebruik je dan jquery?
+    https://symfony.com/doc/current/frontend/encore/simple-example.html
+    problemen met installeren: npm of yarn
+    https://www.jetbrains.com/help/phpstorm/installing-and-removing-external-software-using-node-package-manager.html#
+    dan jquery doen werken. Foutmeldingen checken
+    nog annotations toegevoegd zodat related tags ook worden persist naar database
+    er is ook een bib met allemaal dingetjes om het te vergemakkelijken
+- moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... toward handling and checking things in controller instead. As I was generating errors (overwriting everything related) without being aware of doing so
+X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
+- fixtures for dummy data
+- user roles correspond to a series of authorizations. See security.yaml. Custom voter per object checks access. Could have done this directly, but now there's a centralized place at least so that the check if user is author is also visible at an eye's glance. Also displaying some things and not others in TWIG
+- switch user for easy back-and-forth checking of how things react on permissions
+- storing real users as authors of tickets (so tickets now have 2 properties in different relations with users)
+- getRoles always returns ROLE_CUSTOMER. in security. yaml I may repeat myself in role hierarchy, but I think it's better for clarity as one (me) easily forgets that all registered users have the (related) roles of the customer
+? But I have a custom voter that doesn't care what's in the security.yaml file
+    in the voter I have this 
+            case 'POST_CREATE':
+                // (dd($user));
+                if ($this->security->isGranted('ROLE_CUSTOMER')) {
+                    return true;
+                }
+    and this works fine even when I remove POST_CREATE from security.yaml
+    ? am I mixing things up and using this role check where it shouldn't be used? 
+    ? confusing because of how voters also watch for strings
+    X voter checks for strings. POST_CREATE just activates my own voter instead of (immediatelly) activiating ROLE-system (which it does in a second step)
+    X "Every role must start with ROLE_ (otherwise, things won't work as expected)" https://symfony.com/doc/current/security.html 
+    X now I have:
+    in security.yaml
+      role_hierarchy:
+          ROLE_ADMIN: [ROLE_POST_CREATE, ROLE_POST_VIEW, ROLE_ADMIN_TICKET] which gives ADMIN all these other roles as well
+    in TicketController
+        /**
+         * @Route("/{id}/edit", name="ticket_edit", methods={"GET","POST"})
+         */
+        public function edit(Request $request, Ticket $ticket): Response
+        {
+            if (!$this->isGranted('TICKET_EDIT', $ticket)) {
+                throw $this->createAccessDeniedException('No access!');
+            }
+    in TicketVoter        
+            case 'TICKET_EDIT':
+                if ($this->security->isGranted('ROLE_ADMIN_TICKET')) {
+                    return true;
+                }
+                // logic to determine if the user can EDIT
+                // return true or false
+                break;
+    which gives the users with ROLE_ADMIN access to edit the ticket
+-? what's the added value compared to just checking isGranted immediately in the router?
+            if ($security->isGranted('ROLE_ADMIN_TICKET')) {
+                throw $this->createAccessDeniedException('No access!');
+            }
+    x? the ability to add checks that don't fit the mould of ROLE or IS_AUTHENTICATED, but also e.g. 
+            case 'TICKET_VIEW':
+                if ($ticket->getAuthor() == $user->getEmail()) {
+                    return true;
+                }
+- tried constants in entity ticket for stuff like  "open" status message wthat will be used in if-checks
+- for business logic: it is now possible to create a ticket without assigngin a user. These are displaybed in admin ticket index to be displayed in some admin section in order to be reassigned
+
+### TWIG
+X passing variable to email twig template to send full url
+    <a href="{{ url('ticket_show', {id : ticketid}) }}">View ticket</a>
+- some form fields only visible dependening on ROLE. Some not rendered at all. Default values and such in the ...Type Form classes
+            ->add('priorityLevel', null, [
+                'empty_data' => '0',
+            ])
+            
+            {% if is_granted('ROLE_ADMIN_TICKET') %}
+                {{ form_row(form.priorityLevel) }}
+                {{ form_row(form.externalStatusMessage) }}
+                {{ form_row(form.users) }}
+            {% endif %}
+            {{ form_widget(form._token) }}
+            <button class="btn">{{ button_label|default('Save') }}</button>
+            {{ form_end(form, {'render_rest': false}) }}
+- didn't want to display row for every check that it's empty so used variable to be populated and then checked if it was ppulated or not:
+        {% set foo = '' %}
+        {% for ticket in tickets %}
+            {% if ticket.users is empty %}
+                {% set foo = 'yes' %}
+            {% endif %}
+        {% endfor %}
+        {% if foo == 'yes' %}
+        {% else %}
+            <p>All tickets have been assigned</p>
+        {% endif %}
+
+### ANNOTATIONS
 - massive problems creating new user doesn work bidirectionally with tickets
 *The mappings App\Entity\User#tickets and App\Entity\Ticket#users are inconsistent with each other.
  The association App\Entity\Ticket#users refers to the inverse side field App\Entity\User#users which does not exist.
@@ -90,112 +190,26 @@ X met cascade kan je removen en nog weel meer
          * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="users", cascade={"remove"})
          */
         private $tickets;  
-- user roles correspond to a series of authorizations. See security.yaml. Custom voter per object checks access
-- note that I'm setting the author as a string, not as an object, when creating a new post. When checking access to one's own posts, strings, not objects are compared
-- But I have a custom voter that doesn't care what's in the security.yaml file
-    in the voter I have this 
-            case 'POST_CREATE':
-                // (dd($user));
-                if ($this->security->isGranted('ROLE_CUSTOMER')) {
-                    return true;
-                }
-    and this works fine even when I remove POST_CREATE from security.yaml
-    ? am I mixing things up and using this role check where it shouldn't be used? 
-    ? confusing because of how voters also watch for strings
-    X voter checks for strings. POST_CREATE just activates my own voter instead of (immediatelly) activiating ROLE-system (which it does in a second step)
-    X "Every role must start with ROLE_ (otherwise, things won't work as expected)" https://symfony.com/doc/current/security.html 
-    X now I have:
-    in security.yaml
-      role_hierarchy:
-          ROLE_ADMIN: [ROLE_POST_CREATE, ROLE_POST_VIEW, ROLE_ADMIN_TICKET] which gives ADMIN all these other roles as well
-    in TicketController
-        /**
-         * @Route("/{id}/edit", name="ticket_edit", methods={"GET","POST"})
-         */
-        public function edit(Request $request, Ticket $ticket): Response
-        {
-            if (!$this->isGranted('TICKET_EDIT', $ticket)) {
-                throw $this->createAccessDeniedException('No access!');
-            }
-    in TicketVoter        
-            case 'TICKET_EDIT':
-                if ($this->security->isGranted('ROLE_ADMIN_TICKET')) {
-                    return true;
-                }
-                // logic to determine if the user can EDIT
-                // return true or false
-                break;
-    which gives the users with ROLE_ADMIN access to edit the ticket
--? what's the added value compared to just checking isGranted immediately in the router?
-            if ($security->isGranted('ROLE_ADMIN_TICKET')) {
-                throw $this->createAccessDeniedException('No access!');
-            }
-    x? the ability to add checks that don't fit the mould of ROLE or IS_AUTHENTICATED, but also e.g. 
-            case 'TICKET_VIEW':
-                if ($ticket->getAuthor() == $user->getEmail()) {
-                    return true;
-                }
-- some form fields only visible dependening on ROLE. Some not rendered at all. Default values and such in the ...Type Form classes
-            ->add('priorityLevel', null, [
-                'empty_data' => '0',
-            ])
-            
-            {% if is_granted('ROLE_ADMIN_TICKET') %}
-                {{ form_row(form.priorityLevel) }}
-                {{ form_row(form.externalStatusMessage) }}
-                {{ form_row(form.users) }}
-            {% endif %}
-            {{ form_widget(form._token) }}
-            <button class="btn">{{ button_label|default('Save') }}</button>
-            {{ form_end(form, {'render_rest': false}) }}
-- storing real users as authors of tickets (so tickets now have 2 properties in different relations with users)
-- in order for form to work, I had to build a datatransform that transforms user and their email back and forth
-(got lucky with a combination of https://symfonycasts.com/screencast/symfony-forms/custom-field-type#play (vanaf minuut 3 en daaropvolgende casts) + https://symfony.com/doc/current/form/data_transformers.html)
-- use constants for stuff like  "open" status message wthat will be used in if-checks
-X passing variable to email twig template to send full url
-    <a href="{{ url('ticket_show', {id : ticketid}) }}">View ticket</a>
-X able to reproduce symfonydocs example of adding new records in associated entity via the form of another related entity. Using javascript/jquery. Based on symfonydocs example, but had to fill in many blanks"
-    als ik ticket wil laten heropenen, is dat op niveau van ticket
-    maar ik wil daar dan een comment door de gebruiker bij. Dat is op het niveau van comment
-    hoe krijg ik mijn form zo dat het zowel ticket als commentdingen doet
-    https://symfony.com/doc/current/form/form_collections.html
-    proberen nabouwen
-    https://symfony.com/doc/current/form/form_collections.html
-    is met jquery. hoe gebruik je dan jquery?
-    https://symfony.com/doc/current/frontend/encore/simple-example.html
-    problemen met installeren: npm of yarn
-    https://www.jetbrains.com/help/phpstorm/installing-and-removing-external-software-using-node-package-manager.html#
-    dan jquery doen werken. Foutmeldingen checken
-    nog annotations toegevoegd zodat related tags ook worden persist naar database
-    er is ook een bib met allemaal dingetjes om het te vergemakkelijken
-- moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... toward handling and checking things in controller instead. As I was generating errors without being aware of doing so
-X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
-- didn't want to display row for every check that it's empty so used variable to be populated and then checked if it was ppulated or not:
-        {% set foo = '' %}
-        {% for ticket in tickets %}
-            {% if ticket.users is empty %}
-                {% set foo = 'yes' %}
-            {% endif %}
-        {% endfor %}
-        {% if foo == 'yes' %}
-        {% else %}
-            <p>All tickets have been assigned</p>
-        {% endif %}
-- for business logic: it is now possible to create a ticket without assigngin a user. These are displaybed in admin ticket index to be displayed in some admin section in order to be reassigned
 
 ## TO DO'S
-- only display private comments
-- /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.
+### IMPORTANT
+- dev  branch in master branch mergen0
+- clean this up and move lessons learned to notes
+- remove code pertaining to tasks and tasks, don't forget jquery
+
+### LESS IMPORTANT
+- basically, for learning purposes, this exercise is done. What's left are basically variations of the same thing and while practice does make perfect, I have other priorities
+- notable to do's
+* dashboard: numbers, order according to priorities
+* public/private display
+* Second line agents
+* /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.
     ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. Also, jquery rendering is another thing
 -> learn more over Forms! 
-- remove code pertaining to tasks and tasks, don't forget jquery
-- need to selectively display properties: serializer ... but is'nt that for API? Will need to cha. edit: app.user in twig should do the trick
-- clean this up and move lessons learned to notes
-- dev  branch in master branch mergen0
-- ? how to set id of ticket as default value of comment in formbuilder. Able to do this for author, but now setting ticketid for comment in controller (not very consistent)
+* in several controller using mailer in various ways. Can I put this in some service and streamline it?
+* testing by way of customer/agent/admin journeys and/or ticket journey's (different perspective)
 - ? how to redirect to previous page (here: multiple pages pointing to comment edit endpoint)? TargetPathTrait appears to be for login. Tried passing hidden input field to form, but the medecine seems worse than the cure: https://stackoverflow.com/questions/51498650/redirect-two-steps-back-in-symfony
-- in several controller using mailer in various ways. Can I put this in some service and streamline it?
-- 
+
 
 # ORIGINAL ASSIGNMENT BELOW
 
