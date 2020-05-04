@@ -3,212 +3,58 @@
 ## BASIC IDEA
 - customer make tickets for service requests. These these are then distruted over the helpdesk's employees and resolved. See requirements below
 - PHP Symfony
-
-## IMPLEMENTATION (- points, * subelements, X lessons)
+- Moshi moshi just because I like the sound
+ 
+## IMPLEMENTATION
 
 ### SETUP
-- took time out to schematize: read the assigment and tried to separate the entities and their properties on the one hand and, on the other, listed the actions users can take as I'm planning to assign them to several users (and reuse them whilst doing so) 
-X for futere reference, need even more paper with all sorts of lines drawn
-- for basic set-up, I have 3 entitites. Users and tickets in ManyToMany relation (as a Customer-user can have many tickets and a ticket can have both a Customer-user and a Agent-user) and comments: easy; 1 comments, 1 user/author, 1 ticket; 1 ticket can have many comments; 1 user can have many comments
-? (I was, orginally, gonna extend User class to Customer and Agent classes and NOT have a ManyToMany-relationship, but didn't (immediately) find how Doctrine would react so for now I'm relying on the roles-property
+- branching: master, dev, local branches to try stuff out
+- tried to separate the entities and their properties on the one hand and, on the other, listed the actions users can take as I'm planning to assign them to several users (and reuse them whilst doing so) 
+- took much from https://symfonycasts.com/screencast/symfony-security
 
-### ROUTING 
-- basic article/id123/edit -like routing structure Appending commentcontroller
-* privileging hierarchical ticket > comments, but also trying to provide overview of all comments while restricting/allowing actions in order to keep things logical
-* notable: can't create new comment from generic comment overviewpage
-X note to self: how to deal with multiple parameters in url
-    /**
-     * @Route("/ticket/{ticketid}/comment/{commentid}", name="comment_show", methods={"GET"})
-     * @ParamConverter("ticket", options={"mapping": {"ticketid" : "id"}})
-     * @ParamConverter("comment", options={"mapping": {"commentid" : "id"}})
-     */
-    public function show(Ticket $ticket, Comment $comment): Response
-    {
-    
-### ACCESS 
+### ENTITIES 
+- Users and tickets in ManyToMany relation (as a Customer-user can have many tickets and a ticket can have both a Customer-user and a Agent-user) and comments: easy; 1 comments, 1 user/author, 1 ticket; 1 ticket can have many comments; 1 user can have many comments
+- storing real users as authors of tickets (so tickets now have 2 properties in different relations with users) 
+- make:crud 
+- tried constants in entity ticket for stuff like  "open" status message wthat will be used in if-checks in order to reduce typo's
+- for business logic: it is now possible to create a ticket without assigning a user. These are displaybed in admin ticket index to be displayed in some admin section in order to be reassigned
+- reopening a ticket also allows for writing a comment. Businessly, this makes sense to me, but does not yet display the way I want it 
+
+### ACCESS
+- user roles correspond to a series of authorizations. See security.yaml. Custom voter per object checks access. Could have done this directly, but now there's a centralized place at least so that the check if user is author is also visible at an eye's glance. Also displaying some things and not others in TWIG
+- getRoles always returns ROLE_CUSTOMER. in security. yaml I may repeat myself in role hierarchy,
+- switch user for easy back-and-forth checking of how things react on permissions
 - made functional login form using maker using make:auth and tinkering a bit in security.yaml and such. 
 - registration form using make:registration-form
 - symfonycasts' reset-password-bundle
 - working mailer, using symfony/mailer bundle and mailtrap to debug.
-- welcome mail to all newly registered users (need to change, because this was meant for new agents - see assignment below)
-- created dev branch to try out make:crud in the hopes of facilitating set-up and have a good base to tinker with
-- remember function etc.
 
-### FORMS
-- added data transformer or data data provider to form in order to add roles to new User.
-(got lucky with a combination of https://symfonycasts.com/screencast/symfony-forms/custom-field-type#play (vanaf minuut 3 en daaropvolgende casts) + https://symfony.com/doc/current/form/data_transformers.html)
-X able to reproduce symfonydocs example of adding new records in associated entity via the form of another related entity. Using javascript/jquery. Based on symfonydocs example, but had to fill in many blanks"
-    als ik ticket wil laten heropenen, is dat op niveau van ticket
-    maar ik wil daar dan een comment door de gebruiker bij. Dat is op het niveau van comment
-    hoe krijg ik mijn form zo dat het zowel ticket als commentdingen doet
-    https://symfony.com/doc/current/form/form_collections.html
-    proberen nabouwen
-    https://symfony.com/doc/current/form/form_collections.html
-    is met jquery. hoe gebruik je dan jquery?
-    https://symfony.com/doc/current/frontend/encore/simple-example.html
-    problemen met installeren: npm of yarn
-    https://www.jetbrains.com/help/phpstorm/installing-and-removing-external-software-using-node-package-manager.html#
-    dan jquery doen werken. Foutmeldingen checken
-    nog annotations toegevoegd zodat related tags ook worden persist naar database
-    er is ook een bib met allemaal dingetjes om het te vergemakkelijken
-- moved away from providing default values in forms that I was using and reusing for various actions (new, edit ... various) roles ... 
-- toward handling and checking things in controller instead + creating specific forms to handle specific things. As I was generating errors (overwriting everything related) without being aware of doing so
-X complex interplay of twig, annotations/databas and controller/forms ... now reopen still is a problem
-- fixtures for dummy data
-- user roles correspond to a series of authorizations. See security.yaml. Custom voter per object checks access. Could have done this directly, but now there's a centralized place at least so that the check if user is author is also visible at an eye's glance. Also displaying some things and not others in TWIG
-- switch user for easy back-and-forth checking of how things react on permissions
-- storing real users as authors of tickets (so tickets now have 2 properties in different relations with users)
-- getRoles always returns ROLE_CUSTOMER. in security. yaml I may repeat myself in role hierarchy, but I think it's better for clarity as one (me) easily forgets that all registered users have the (related) roles of the customer
-? But I have a custom voter that doesn't care what's in the security.yaml file
-    in the voter I have this 
-            case 'POST_CREATE':
-                // (dd($user));
-                if ($this->security->isGranted('ROLE_CUSTOMER')) {
-                    return true;
-                }
-    and this works fine even when I remove POST_CREATE from security.yaml
-    ? am I mixing things up and using this role check where it shouldn't be used? 
-    ? confusing because of how voters also watch for strings
-    X voter checks for strings. POST_CREATE just activates my own voter instead of (immediatelly) activiating ROLE-system (which it does in a second step)
-    X "Every role must start with ROLE_ (otherwise, things won't work as expected)" https://symfony.com/doc/current/security.html 
-    X now I have:
-    in security.yaml
-      role_hierarchy:
-          ROLE_ADMIN: [ROLE_POST_CREATE, ROLE_POST_VIEW, ROLE_ADMIN_TICKET] which gives ADMIN all these other roles as well
-    in TicketController
-        /**
-         * @Route("/{id}/edit", name="ticket_edit", methods={"GET","POST"})
-         */
-        public function edit(Request $request, Ticket $ticket): Response
-        {
-            if (!$this->isGranted('TICKET_EDIT', $ticket)) {
-                throw $this->createAccessDeniedException('No access!');
-            }
-    in TicketVoter        
-            case 'TICKET_EDIT':
-                if ($this->security->isGranted('ROLE_ADMIN_TICKET')) {
-                    return true;
-                }
-                // logic to determine if the user can EDIT
-                // return true or false
-                break;
-    which gives the users with ROLE_ADMIN access to edit the ticket
--? what's the added value compared to just checking isGranted immediately in the router?
-            if ($security->isGranted('ROLE_ADMIN_TICKET')) {
-                throw $this->createAccessDeniedException('No access!');
-            }
-    x? the ability to add checks that don't fit the mould of ROLE or IS_AUTHENTICATED, but also e.g. 
-            case 'TICKET_VIEW':
-                if ($ticket->getAuthor() == $user->getEmail()) {
-                    return true;
-                }
-- tried constants in entity ticket for stuff like  "open" status message wthat will be used in if-checks
-- for business logic: it is now possible to create a ticket without assigngin a user. These are displaybed in admin ticket index to be displayed in some admin section in order to be reassigned
-
-### TWIG
-- as always, paid very little attention to style. Was an ends to a mean and it's the most messy and can't be bothered to clean up/streamline
-X passing variable to email twig template to send full url
-    <a href="{{ url('ticket_show', {id : ticketid}) }}">View ticket</a>
-- some form fields only visible dependening on ROLE. Some not rendered at all. Default values and such in the ...Type Form classes
-            ->add('priorityLevel', null, [
-                'empty_data' => '0',
-            ])
-            
-            {% if is_granted('ROLE_ADMIN_TICKET') %}
-                {{ form_row(form.priorityLevel) }}
-                {{ form_row(form.externalStatusMessage) }}
-                {{ form_row(form.users) }}
-            {% endif %}
-            {{ form_widget(form._token) }}
-            <button class="btn">{{ button_label|default('Save') }}</button>
-            {{ form_end(form, {'render_rest': false}) }}
-- didn't want to display row for every check that it's empty so used variable to be populated and then checked if it was ppulated or not:
-        {% set foo = '' %}
-        {% for ticket in tickets %}
-            {% if ticket.users is empty %}
-                {% set foo = 'yes' %}
-            {% endif %}
-        {% endfor %}
-        {% if foo == 'yes' %}
-        {% else %}
-            <p>All tickets have been assigned</p>
-        {% endif %}
-
-### ANNOTATIONS
-- massive problems creating new user doesn work bidirectionally with tickets
-*The mappings App\Entity\User#tickets and App\Entity\Ticket#users are inconsistent with each other.
- The association App\Entity\Ticket#users refers to the inverse side field App\Entity\User#users which does not exist.
- spelling mistake? user vs users
- inversedby vs mappedby
-X OK die mapped by en inversedby annotation s lijkt me te verwijzen naar de property(!)naam in de andere entity. Geen fout in ieder geval meer)
-* ook als ik user wil verwijderen nu:
- "You cannot refresh a user from the EntityUserProvider that does not contain an identifier. The user object has to be serialized with its own identifier mapped by Doctrine."
-X OK was omdat ik mezelf (ingelogde gebruiken) verwijderde
-X entity with inversedBy above a property is the owning side (mapped by is inverse side): ticket (makes more sense: Whenever you add a new article, you want to connect it with existing or new tags. 
-check https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/association-mapping.html
-https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/association-mapping.html#owning-and-inverse-side-on-a-manytomany-association
-https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#many-to-many-bidirectional
-X after many hours I created a different branch in order to follow step of https://symfonycasts.com/screencast/collections/saving-inverse-side-collection :
-"We didn't need to add a lot of code to get this to work... but this situation has caused many developers to lose countless hours trying to get their relationship to save. To summarize: if you're modifying the inverse side of a relationship, set the by_reference form option to false, create an adder and remover function, and make sure you set the owning side of the relationship in each. That is it."
-X opgelost: in formulier moest ik naar klasse verwijzen en reference naar false zetten in de reverse side. Zonder die multple werkt het gelijk ook neit. Kwestie van functionaliteit betekent het dat men meerdere Tickets kan toewijzen aan de nieuwe gebruiker
-            ->add('tickets', EntityType::class, [
-                'class' => Ticket::class,
-                'multiple' => true,
-                'by_reference' => false,
-            ])
-            ook moet ik in de addmethode zowel eigen property updaten als method op de owner aanroepen;
-                        $this->tickets[] = $ticket;
-                        $ticket->addUser($this);
-            deze laatste geldt voor beide, owning en inverse, maar voor de owning staat het erpreciesal
-            (if-checks in die methodes zijn nodige om geen infinite loops te creeren/infinite recursion)
-X great tools for tinkering with annotations 
- php bin/console doctrine:schema:validate
- php bin/console doctrine:schema:update --force
-- deleteing a users, deletes all related tickets and comments, but deleting a ticket or a comment doesnt delete user. Deleting a ticket, deletes a comment, but deleting a comment doesnt delete the ticket
-X met cascade kan je removen en nog weel meer
-  je kan dan zeggen wat de verschillende entities mogen doen bij anderen 
-  hoe je het gebruikt is ook van belang voor de richting:
-    beide richtingen moet je je annotations voor beide zo schrijven:
-        /**
-         * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets", cascade={"remove"})
-         */
-    en dus ook
-        /**
-         * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="users", cascade={"remove"})
-         */
-        private $tickets;
-    waarbij ik doel op dat ze allemaal bij dezelfde cascade remove moeten hebben
+### ROUTING 
+- basic article/id123/edit -like routing structure Appending commentcontroller mostly
+- privileging hierarchical ticket > comments, but also trying to provide overview of all comments while restricting/allowing actions in order to keep things logical. Notably, one can't create new comment from generic comment overviewpage
     
-    enkel 1 richting:
-    1 zal dan 
-    bij owner wat meer tekst zijn
-             /**
-              * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="tickets")
-              * @ORM\JoinTable(name="ticket_user",
-              *      joinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")},
-              *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
-              * )
-              */
-    en bij inverse dan 
-        /**
-         * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="users", cascade={"remove"})
-         */
-        private $tickets;  
+### TWIG
+- as always, paid very little attention to style. Was an ends to a mean, to debug really
 
 ## TO DO'S
-- move lessons learned to docs elswhere
 - basically, for learning purposes, this exercise is done. What's left are basically variations of the same thing and while practice does make perfect, I have other priorities
+- in hindsight, this would be a candidate to try state machine pattern out. 
 
-- notable to do's
-* dashboard: numbers, order according to priorities
-* public/private display
-* Second line agents
-* /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? Tried with event listeners, but was trial-and-error and error ultimately.
-    ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. Also, jquery rendering is another thing
--> learn more over Forms! 
-* in several controller using mailer in various ways. Can I put this in some service and streamline it?
-* testing by way of customer/agent/admin journeys and/or ticket journey's (different perspective)
-- ? how to redirect to previous page (here: multiple pages pointing to comment edit endpoint)? TargetPathTrait appears to be for login. Tried passing hidden input field to form, but the medecine seems worse than the cure: https://stackoverflow.com/questions/51498650/redirect-two-steps-back-in-symfony
+- notable to do's:
+- dashboard: numbers, order tickets according to priorities
+- public/private display
+- Second line agents
+- /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? 
+    Tried with event listeners, but was trial-and-error and error ultimately.
+    ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. 
+    Also, jquery rendering is another thing
+    perhaps this library can help: https://github.com/a2lix/symfony-collection 
+- how to redirect to previous page (here: multiple pages pointing to comment edit endpoint)? TargetPathTrait appears to be for login. Tried passing hidden input field to form, but the medecine seems worse than the cure: https://stackoverflow.com/questions/51498650/redirect-two-steps-back-in-symfony
+- should probably rename the users property of tickets to agents or so. Also maybe limit it to 1 instead of multiple. Easier workflow, I think
+- welcome mail now all newly registered users (need to change, because this was meant for new agents - see assignment below)
+- in several controller using mailer in various ways. Can I put this in some service and streamline it?
+- testing by way of customer/agent/admin journeys/routes and/or ticket journey's (different perspective). Take a piece of paper and start drawing lines
+- maybe extend User class to Customer and Agent classes and NOT have a ManyToMany-relationship with Ticket instead of using roles
 
 
 # ORIGINAL ASSIGNMENT BELOW
