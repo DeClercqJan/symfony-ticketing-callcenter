@@ -39,20 +39,21 @@
 ## TO DO'S
 - basically, for learning purposes, this exercise is done. What's left are basically variations of the same thing and while practice does make perfect, I have other priorities
 - in hindsight, this would be a candidate to try state machine pattern out. 
-- dashboard: numbers, order tickets according to priorities
-- public/private display
-- Second line agents
-- /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? 
-    Tried with event listeners, but was trial-and-error and error ultimately.
-    ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. 
-    Also, jquery rendering is another thing
-    perhaps this library can help: https://github.com/a2lix/symfony-collection 
-- how to redirect to previous page (here: multiple pages pointing to comment edit endpoint)? TargetPathTrait appears to be for login. Tried passing hidden input field to form, but the medecine seems worse than the cure: https://stackoverflow.com/questions/51498650/redirect-two-steps-back-in-symfony
-- should probably rename the users property of tickets to agents or so. Also maybe limit it to 1 instead of multiple. Easier workflow, I think
-- welcome mail now all newly registered users (need to change, because this was meant for new agents - see assignment below)
-- in several controller using mailer in various ways. Can I put this in some service and streamline it?
-- testing by way of customer/agent/admin journeys/routes and/or ticket journey's (different perspective). Take a piece of paper and start drawing lines
-- maybe extend User class to Customer and Agent classes and NOT have a ManyToMany-relationship with Ticket instead of using roles
+- notable to do's
+    - dashboard: numbers, order tickets according to priorities
+    - public/private display
+    - Second line agents
+    - /reopen still has too many fields: how can I add only one row to existing collection without rendering the collection? 
+        - Tried with event listeners, but was trial-and-error and error ultimately.
+        - ! not rendering to twig, may result in overwriting all data of other comments instead of just adding one. Therefore, I've chosen to display all in order to make this clear at least. 
+        - Also, jquery rendering is another thing
+        - perhaps this library can help: https://github.com/a2lix/symfony-collection 
+    - how to redirect to previous page (here: multiple pages pointing to comment edit endpoint)? TargetPathTrait appears to be for login. Tried passing hidden input field to form, but the medecine seems worse than the cure: https://stackoverflow.com/questions/51498650/redirect-two-steps-back-in-symfony
+    - should probably rename the users property of tickets to agents or so. Also maybe limit it to 1 instead of multiple. Easier workflow, I think
+    - welcome mail now all newly registered users (need to change, because this was meant for new agents - see assignment below)
+    - in several controller using mailer in various ways. Can I put this in some service and streamline it?
+    - testing by way of customer/agent/admin journeys/routes and/or ticket journey's (different perspective). Take a piece of paper and start drawing lines
+    - maybe extend User class to Customer and Agent classes and NOT have a ManyToMany-relationship with Ticket instead of using roles
 
 
 # ORIGINAL ASSIGNMENT BELOW
