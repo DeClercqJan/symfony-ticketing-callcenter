@@ -39,8 +39,6 @@
 ## TO DO'S
 - basically, for learning purposes, this exercise is done. What's left are basically variations of the same thing and while practice does make perfect, I have other priorities
 - in hindsight, this would be a candidate to try state machine pattern out. 
-
-- notable to do's:
 - dashboard: numbers, order tickets according to priorities
 - public/private display
 - Second line agents
